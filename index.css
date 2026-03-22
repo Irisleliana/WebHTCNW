@@ -1,0 +1,254 @@
+:root {
+    --primary-color: #d35400;
+    --primary-dark: #b34700;
+    --text-dark: #2c3e50;
+    --text-light: #ffffff;
+    --text-gray: #7f8c8d;
+    --bg-light: #faf8f5;
+    --bg-white: #ffffff;
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
+    --transition: all 0.3s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.hero-section {
+    position: relative;
+    min-height: 500px;
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+             
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    padding: 60px 80px;
+    overflow: hidden;
+}
+
+.hero-content {
+    flex: 1;
+    max-width: 550px;
+    z-index: 2;
+}
+
+.hero-subtitle {
+    display: block;
+    color: #d4a574;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 600;
+    color: var(--text-light);
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+.hero-description {
+    color: rgba(255,255,255,0.85);
+    font-size: 1rem;
+    margin-bottom: 30px;
+    line-height: 1.8;
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--primary-color);
+    color: var(--text-light);
+    padding: 15px 35px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.hero-image {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+}
+
+.coffee-cup-wrapper {
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 5px solid rgba(255,255,255,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.coffee-cup-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.featured-section {
+    padding: 60px 80px;
+    background: var(--bg-white);
+}
+
+.section-title {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--text-dark);
+    margin-bottom: 40px;
+}
+
+.cafe-slider {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.slider-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-white);
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.slider-btn:hover {
+    background: var(--primary-color);
+    color: var(--text-light);
+}
+
+.cafe-cards {
+    display: flex;
+    gap: 25px;
+    flex: 1;
+    overflow: hidden;
+    padding: 20px;
+}
+
+.cafe-card {
+    flex: 1;
+    background: var(--bg-white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.cafe-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.cafe-card:focus-visible {
+    outline: 3px solid rgba(211, 84, 0, 0.5);
+    outline-offset: 3px;
+}
+
+.cafe-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.cafe-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cafe-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 35px;
+    height: 35px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    font-size: 0.85rem;
+}
+
+.cafe-info {
+    padding: 20px;
+    background: #fdf6e3;
+}
+
+.cafe-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-gray);
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+
+.cafe-rating i {
+    color: #f1c40f;
+}
+
+.cafe-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+
+.floating-search-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--primary-color);
+    color: var(--text-light);
+    padding: 15px 25px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(211, 84, 0, 0.4);
+    transition: var(--transition);
+    z-index: 1000;
+}
+
+.floating-search-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-3px);
+}
+

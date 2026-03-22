@@ -1,0 +1,125 @@
+:root {
+	--primary-color: #d35400;
+	--primary-dark: #b34700;
+	--text-dark: #2c3e50;
+	--text-muted: #5f6c7b;
+	--bg-page: #f7f5f0;
+	--bg-card: #ffffff;
+	--shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	background: linear-gradient(120deg, #f5f1e7 0%, #fff9ef 100%);
+	color: var(--text-dark);
+}
+
+.detail-page-main {
+	min-height: calc(100vh - 220px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 40px 20px;
+	background: var(--bg-page);
+}
+
+.detail-card {
+	width: 100%;
+	max-width: 860px;
+	border-radius: 20px;
+	background: var(--bg-card);
+	box-shadow: var(--shadow);
+	padding: 32px;
+}
+
+.detail-label {
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	color: #ab6c36;
+	font-size: 0.8rem;
+	margin-bottom: 10px;
+}
+
+.detail-name {
+	font-family: 'Playfair Display', serif;
+	font-size: 2rem;
+	margin-bottom: 24px;
+}
+
+.detail-meta-grid {
+	display: grid;
+	gap: 14px;
+	grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.detail-meta-item {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 14px;
+	border-radius: 12px;
+	background: #fff8ef;
+	border: 1px solid #f5e6d2;
+}
+
+.meta-icon {
+	width: 34px;
+	height: 34px;
+	border-radius: 50%;
+	background: var(--primary-color);
+	color: #fff;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.meta-label {
+	color: var(--text-muted);
+	font-size: 0.85rem;
+	margin-bottom: 4px;
+}
+
+.meta-value {
+	font-size: 1rem;
+	font-weight: 600;
+}
+
+.detail-description {
+	margin-top: 22px;
+	color: #4b5563;
+	line-height: 1.7;
+}
+
+.detail-back-btn {
+	margin-top: 26px;
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	text-decoration: none;
+	padding: 11px 18px;
+	border-radius: 999px;
+	color: #fff;
+	background: var(--primary-color);
+	transition: 0.2s ease;
+}
+
+.detail-back-btn:hover {
+	background: var(--primary-dark);
+}
+
+@media (min-width: 768px) {
+	.detail-meta-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.detail-card {
+		padding: 40px;
+	}
+}
