@@ -1,34 +1,22 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DrinkHub - Review Thật & Đặt Món Nhanh</title> 
+    <title>DrinkHub - Review Thật & Đặt Món Nhanh</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="./assets/component/footer/footer.css">
     <link rel="stylesheet" href="./assets/component/header/header.css">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        .delivery-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #ff6b00;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-    </style>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../WebHTCNW-main/index.css">
 </head>
+
 <body>
 
     <div id="header-placeholder"></div>
@@ -38,14 +26,12 @@
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <span class="hero-subtitle">NỀN TẢNG REVIEW & ĐẶT MÓN TOÀN DIỆN</span>
-                
                 <h1 class="hero-title">Từ Review Chân Thực<br>Đến Ly Nước Trên Tay</h1>
-                
                 <p class="hero-description">
-                    Đừng đánh cược vị giác của bạn. Khám phá hàng ngàn đánh giá thực tế từ cộng đồng DrinkHub để chọn đúng món "chân ái". Ưng ý quán nào? Bấm đặt hàng ngay và nhận nước chỉ trong 30 phút.
+                    Đừng đánh cược vị giác của bạn. Khám phá hàng ngàn đánh giá thực tế từ cộng đồng DrinkHub để chọn
+                    đúng món "chân ái". Ưng ý quán nào? Bấm đặt hàng ngay và nhận nước chỉ trong 30 phút.
                 </p>
-                
-                <a href="#" class="btn-primary">
+                <a href="./pages/listPage/listPage.html" class="btn-primary">
                     Xem Review & Đặt Món <i class="fa-solid fa-motorcycle"></i>
                 </a>
             </div>
@@ -57,70 +43,246 @@
         </section>
 
         <section class="featured-section">
-            <h2 class="section-title">Quán Nhiều Review Nhất</h2>
-            
+            <h2 class="section-title">Khám phá những quán Caffe ngon tại Sài Gòn City</h2>
+
             <div class="cafe-slider">
-                <button class="slider-btn prev-btn">
+                <button class="slider-btn prev-btn" id="prevBtn">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
-                
-                <div class="cafe-cards">
-                    <div class="cafe-card">
+
+                <div class="cafe-cards" id="cafeCardsContainer">
+                    <!-- Quán 1: Oromia Coffee -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(1, 'Oromia Coffee', 'Quận 3', 4.7, 120, './img/img1.jpg')">
                         <div class="cafe-image">
                             <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 20p</span>
-                            <img src="" alt="">
-                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 128</span>
+                            <img src="./img/img1.jpg" alt="Oromia Coffee">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 120</span>
                         </div>
                         <div class="cafe-info">
-                            <div class="cafe-rating">
-                                <i class="fa-solid fa-star"></i> 4.8
-                            </div>
-                            <h3 class="cafe-name">Thức Coffee</h3>
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.7</div>
+                            <h3 class="cafe-name">Oromia Coffee</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Quận 3, TP.HCM</div>
                         </div>
                     </div>
-                    
-                    <div class="cafe-card">
+
+                    <!-- Quán 2: The Workshop -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(2, 'The Workshop', 'Quận 1', 4.6, 98, './pages/listPage/img/img2.jpg')">
                         <div class="cafe-image">
                             <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 15p</span>
-                            <img src="" alt="">
+                            <img src="./img/img2.jpg" alt="The Workshop">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 98</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.6</div>
+                            <h3 class="cafe-name">The Workshop</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Quận 1, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 3: L'usine -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(3, 'L\'usine', 'Quận 1', 4.5, 85, './pages/listPage/img/img3.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge" style="background-color: #27ae60;"><i
+                                    class="fa-solid fa-tag"></i> Freeship</span>
+                            <img src="./img/img3.jpg" alt="L'usine">
                             <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 85</span>
                         </div>
                         <div class="cafe-info">
-                            <div class="cafe-rating">
-                                <i class="fa-solid fa-star"></i> 4.3
-                            </div>
-                            <h3 class="cafe-name">LAVA Coffee</h3>
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.5</div>
+                            <h3 class="cafe-name">L'usine</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Quận 1, TP.HCM</div>
                         </div>
                     </div>
-                    
-                    <div class="cafe-card">
+
+                    <!-- Quán 4: Thinker & Dreamer -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(4, 'Thinker & Dreamer', 'Quận 1', 4.8, 140, './pages/listPage/img/img4.jpg')">
                         <div class="cafe-image">
-                             <span class="delivery-badge" style="background-color: #27ae60;"><i class="fa-solid fa-tag"></i> Freeship</span>
-                            <img src="" alt="">
-                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 204</span>
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 18p</span>
+                            <img src="./img/img4.jpg" alt="Thinker & Dreamer">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 140</span>
                         </div>
                         <div class="cafe-info">
-                            <div class="cafe-rating">
-                                <i class="fa-solid fa-star"></i> 4.9
-                            </div>
-                            <h3 class="cafe-name">Saigon Chic</h3>
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.8</div>
+                            <h3 class="cafe-name">Thinker & Dreamer</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Quận 1, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 5: Coffee Hut -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(5, 'Coffee Hut', 'Bình Thạnh', 4.5, 60, './pages/listPage/img/img5.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 12p</span>
+                            <img src="./img/img5.jpg" alt="Coffee Hut">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 60</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.5</div>
+                            <h3 class="cafe-name">Coffee Hut</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Bình Thạnh, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 6: The Coffee House -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(6, 'The Coffee House', 'Phú Nhuận', 4.4, 110, './pages/listPage/img/img6.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 15p</span>
+                            <img src="./img/img6.jpg" alt="The Coffee House">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 110</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.4</div>
+                            <h3 class="cafe-name">The Coffee House</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Phú Nhuận, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 7: VIP COFFEE -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(7, 'VIP COFFEE', 'Gò Vấp', 4.8, 90, './pages/listPage/img/img7.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge" style="background-color: #27ae60;"><i
+                                    class="fa-solid fa-tag"></i> Freeship</span>
+                            <img src="./img/img7.jpg" alt="VIP COFFEE">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 90</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.8</div>
+                            <h3 class="cafe-name">VIP COFFEE</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Gò Vấp, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 8: Mây Coffee -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(8, 'Mây Coffee', 'Phú Nhuận', 4.7, 72, './pages/listPage/img/img8.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 20p</span>
+                            <img src="./img/img8.jpg" alt="Mây Coffee">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 72</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.7</div>
+                            <h3 class="cafe-name">Mây Coffee</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Phú Nhuận, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 9: Sài Gòn Chic -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(9, 'Sài Gòn Chic', 'Gò Vấp', 4.7, 92, './pages/listPage/img/img9.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 15p</span>
+                            <img src="./img/img9.jpg" alt="Sài Gòn Chic">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 92</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.7</div>
+                            <h3 class="cafe-name">Sài Gòn Chic</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Gò Vấp, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 10: Gió Cafe -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(10, 'Gió Cafe', 'Bình Thạnh', 4.6, 65, './pages/listPage/img/img10.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 18p</span>
+                            <img src="./img/img10.jpg" alt="Gió Cafe">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 65</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.6</div>
+                            <h3 class="cafe-name">Gió Cafe</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Bình Thạnh, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 11: Thức COFFE -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(11, 'Thức COFFE', 'Gò Vấp', 4.9, 98, './pages/listPage/img/img11.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge" style="background-color: #ff6b00;"><i
+                                    class="fa-solid fa-moon"></i> Mở 24/7</span>
+                            <img src="./img/img11.jpg" alt="Thức COFFE">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 98</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.9</div>
+                            <h3 class="cafe-name">Thức COFFE</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Gò Vấp, TP.HCM</div>
+                        </div>
+                    </div>
+
+                    <!-- Quán 12: Tiệm Cà Phê Của Ngoại -->
+                    <div class="cafe-card"
+                        onclick="goToCafeDetail(12, 'Tiệm Cà Phê Của Ngoại', 'Phú Nhuận', 4.8, 85, './pages/listPage/img/img12.jpg')">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 22p</span>
+                            <img src="./img/img12.jpg" alt="Tiệm Cà Phê Của Ngoại">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 85</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating"><i class="fa-solid fa-star"></i> 4.8</div>
+                            <h3 class="cafe-name">Tiệm Cà Phê Của Ngoại</h3>
+                            <div class="cafe-address"><i class="fa-solid fa-location-dot"></i> Phú Nhuận, TP.HCM</div>
                         </div>
                     </div>
                 </div>
-                
-                <button class="slider-btn next-btn">
+
+                <button class="slider-btn next-btn" id="nextBtn">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
             </div>
         </section>
     </main>
 
-    <button class="floating-search-btn">
+    <button class="floating-search-btn" onclick="window.location.href='./pages/listPage/listPage.html'">
         <i class="fa-solid fa-search"></i> Bạn đang thèm gì?
     </button>
 
     <div id="footer-placeholder"></div>
 
     <script src="./assets/js/main.js"></script>
+    <script>
+        const slider = document.getElementById('cafeCardsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        if (prevBtn && nextBtn && slider) {
+            prevBtn.addEventListener('click', () => {
+                slider.scrollBy({
+                    left: -300,
+                    behavior: 'smooth'
+                });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                slider.scrollBy({
+                    left: 300,
+                    behavior: 'smooth'
+                });
+            });
+        }
+        function goToCafeDetail(id, name, district, rating, reviewCount, imageUrl) {
+            const cafeData = {
+                id: id,
+                ten: name,
+                quan: district,
+                rating: rating,
+                review: reviewCount,
+                img: imageUrl
+            };
+            localStorage.setItem("selectedCafe", JSON.stringify(cafeData));
+            window.location.href = "./pages/listPage/listPage.html";
+        }
+        window.goToCafeDetail = goToCafeDetail;
+    </script>
 </body>
+
 </html>
