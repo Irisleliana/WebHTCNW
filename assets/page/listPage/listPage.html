@@ -1,24 +1,356 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Review - DrinkHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../component/header/header.css">
     <link rel="stylesheet" href="../../component/footer/footer.css">
-    <link rel="stylesheet" href="./listPage.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../listPage/listPage.css">
 </head>
+
 <body>
     <div id="header-placeholder"></div>
 
-    <main>
-        <h2>Chào mừng đến với Danh sách quán</h2>
-    </main>
+    <div class="container" style="max-width: 1300px;">
+        <div class="page-title">
+            <h2>Khám Phá Không Gian Cafe</h2>
+            <div class="subtitle">Những quán cafe đẹp nhất Sài Gòn</div>
+        </div>
+        <div class="filter-section">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-5">
+                    <input type="text" id="searchInput" class="form-control" placeholder="🔍 Tìm kiếm quán cafe...">
+                </div>
+                <div class="col-md-4">
+                    <select id="locQuan" class="form-select">
+                        <option value="all">📍 Tất cả quận</option>
+                        <option value="Quận 1">Quận 1</option>
+                        <option value="Quận 3">Quận 3</option>
+                        <option value="Gò Vấp">Gò Vấp</option>
+                        <option value="Phú Nhuận">Phú Nhuận</option>
+                        <option value="Bình Thạnh">Bình Thạnh</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button onclick="locQuan()" class="btn w-100">
+                        <i class="fas fa-sliders-h"></i> Lọc kết quả
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- LIST QUÁN -->
+        <div class="row g-4" id="listCafe">
+            <!-- Quán 1 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Oromia Coffee" data-quan="Quận 3" data-id="1">
+                <div class="cafe-card" onclick="chonQuan(1)">
+                    <div class="img-box">
+                        <img src="./img/img1.jpg" alt="Oromia Coffee">
+                        <div class="badge-hot">🔥 Hot</div>
+                        <div class="heart" onclick="event.stopPropagation()"><i class="far fa-heart"></i> </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Oromia Coffee</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.7 </div>
+                        <div class="cafe-quan"> <i class="fas fa-map-marker-alt"></i> Quận 3 </div>
+                        <div class="cafe-review"> <i class="far fa-comment-dots"></i> 120 đánh giá </div>
+                        <div class="delivery"> <i class="fas fa-motorcycle"></i> Giao hàng nhanh </div>
+                        <div class="tags">
+                            <span>☕ Wifi</span>
+                            <span>❄️ Máy lạnh</span>
+                            <span>🔌 Ổ cắm</span>
+                            <span>🎵 Nhạc nhẹ</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Quán 2 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="The Workshop" data-quan="Quận 1" data-id="2">
+                <div class="cafe-card" onclick="chonQuan(2)">
+                    <div class="img-box">
+                        <img src="./img/img2.jpg" alt="The Workshop">
+                        <div class="heart" onclick="event.stopPropagation()"> <i class="far fa-heart"></i> </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">The Workshop</h3>
+                        <div class="cafe-rating"> <i class="fas fa-star"></i> 4.6 </div>
+                        <div class="cafe-quan"> <i class="fas fa-map-marker-alt"></i> Quận 1 </div>
+                        <div class="cafe-review"> <i class="far fa-comment-dots"></i> 98 đánh giá</div>
+                        <div class="delivery"> <i class="fas fa-motorcycle"></i> Giao hàng nhanh </div>
+                        <div class="tags">
+                            <span>☕ Wifi</span>
+                            <span>❄️ Máy lạnh</span>
+                            <span>🔌 Ổ cắm</span>
+                            <span>🎨 Không gian sáng tạo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Quán 3 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="L'usine" data-quan="Quận 1" data-id="3">
+                <div class="cafe-card" onclick="chonQuan(3)">
+                    <div class="img-box">
+                        <img src="./img/img3.jpg" alt="L'usine">
+                        <div class="heart" onclick="event.stopPropagation()"><i class="far fa-heart"></i></div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">L'usine</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.5</div>
+                        <div class="cafe-quan"> <i class="fas fa-map-marker-alt"></i> Quận 1</div>
+                        <div class="cafe-review"> <i class="far fa-comment-dots"></i> 85 đánh giá</div>
+                        <div class="delivery"> <i class="fas fa-motorcycle"></i> Giao hàng tiêu chuẩn</div>
+                        <div class="tags">
+                            <span>☕ Wifi</span>
+                            <span>❄️ Máy lạnh</span>
+                            <span>🎨 Art space</span>
+                            <span>🍽️ Ẩm thực Âu</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Quán 4 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Thinker & Dreamer" data-quan="Quận 1" data-id="4">
+                <div class="cafe-card" onclick="chonQuan(4)">
+                    <div class="img-box">
+                        <img src="./img/img4.jpg" alt="Thinker & Dreamer">
+                        <div class="badge-hot">🌿 Chill</div>
+                        <div class="heart" onclick="event.stopPropagation()"> <i class="far fa-heart"></i> </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Thinker & Dreamer</h3>
+                        <div class="cafe-rating"> <i class="fas fa-star"></i> 4.8 </div>
+                        <div class="cafe-quan"> <i class="fas fa-map-marker-alt"></i> Quận 1 </div>
+                        <div class="cafe-review"> <i class="far fa-comment-dots"></i> 140 đánh giá</div>
+                        <div class="delivery"> <i class="fas fa-motorcycle"></i> Giao hàng nhanh </div>
+                        <div class="tags">
+                            <span>☕ Wifi</span>
+                            <span>🌿 Sân vườn</span>
+                            <span>🐶 Pet friendly</span>
+                            <span>🌳 Không gian xanh</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Quán 5 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Coffee Hut" data-quan="Bình Thạnh" data-id="5">
+                <div class="cafe-card" onclick="chonQuan(5)">
+                    <div class="img-box">
+                        <img src="./img/img5.jpg" alt="Coffee Hut">
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Coffee Hut</h3>
+                        <div class="cafe-rating"> <i class="fas fa-star"></i> 4.5 </div>
+                        <div class="cafe-quan"> <i class="fas fa-map-marker-alt"></i> Bình Thạnh</div>
+                        <div class="cafe-review"> <i class="far fa-comment-dots"></i> 60 đánh giá</div>
+                        <div class="delivery"> <i class="fas fa-motorcycle"></i> Giao hàng nhanh</div>
+                        <div class="tags">
+                            <span>☕ Wifi</span>
+                            <span>❄️ Máy lạnh</span>
+                            <span>🎵 Nhạc nhẹ</span>
+                            <span>🚗 Chỗ đỗ xe</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quán 6 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="The Coffee House" data-quan="Phú Nhuận" data-id="6">
+                <div class="cafe-card" onclick="chonQuan(6)">
+                    <div class="img-box">
+                        <img src="./img/img6.jpg" alt="The Coffee House">
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">The Coffee House</h3>
+                        <div class="cafe-rating"> <i class="fas fa-star"></i> 4.4</div>
+                        <div class="cafe-quan"><i class="fas fa-map-marker-alt"></i> Phú Nhuận </div>
+                        <div class="cafe-review"><i class="far fa-comment-dots"></i> 110 đánh giá </div>
+                        <div class="delivery"><i class="fas fa-motorcycle"></i> Giao hàng tiêu chuẩn </div>
+                        <div class="tags"> <span>☕ Wifi</span>
+                            <span>❄️ Máy lạnh</span>
+                            <span>🔌 Ổ cắm</span>
+                            <span>☕ Menu đa dạng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Quán 7 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="VIP COFFEE" data-quan="Gò Vấp" data-id="7">
+                <div class="cafe-card" onclick="chonQuan(7)">
+                    <div class="img-box">
+                        <img src="./img/img7.jpg" alt="VIP COFFEE">
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">VIP COFFEE</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.8</div>
+                        <div class="cafe-quan"><i class="fas fa-map-marker-alt"></i> Gò Vấp</div>
+                        <div class="cafe-review"><i class="far fa-comment-dots"></i> 90 đánh giá</div>
+                        <div class="delivery"><i class="fas fa-motorcycle"></i> Giao hàng nhanh</div>
+                        <div class="tags"><span>☕ Wifi</span><span>❄️ Máy lạnh</span><span>🌇 View đẹp</span></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Quán 8 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Mây Coffee" data-quan="Phú Nhuận" data-id="8">
+                <div class="cafe-card" onclick="chonQuan(8)">
+                    <div class="img-box">
+                        <img src="./img/img8.jpg" alt="Mây Coffee">
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Mây Coffee</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.7</div>
+                        <div class="cafe-quan"><i class="fas fa-map-marker-alt"></i> Phú Nhuận</div>
+                        <div class="cafe-review"><i class="far fa-comment-dots"></i> 72 đánh giá</div>
+                        <div class="delivery"><i class="fas fa-motorcycle"></i> Giao hàng tiêu chuẩn</div>
+                        <div class="tags"><span>☕ Wifi</span><span>🌇 Sân thượng</span><span>🌅 View đẹp</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quán 9 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Sài Gòn Chic" data-quan="Gò Vấp" data-id="9">
+                <div class="cafe-card" onclick="chonQuan(9)">
+                    <div class="img-box">
+                        <img src="./img/img9.jpg" alt="Sài Gòn Chic">
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Sài Gòn Chic</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.7</div>
+                        <div class="cafe-quan"><i class="fas fa-map-marker-alt"></i> Gò Vấp</div>
+                        <div class="cafe-review"><i class="far fa-comment-dots"></i> 92 đánh giá</div>
+                        <div class="delivery"><i class="fas fa-motorcycle"></i> Giao hàng nhanh</div>
+                        <div class="tags"><span>☕ Wifi</span><span>❄️ Máy lạnh</span><span>🐟 Hồ cá</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quán 10 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Gió Cafe" data-quan="Bình Thạnh" data-id="10">
+                <div class="cafe-card" onclick="chonQuan(10)">
+                    <div class="img-box">
+                        <img src="./img/img10.jpg" alt="Gió Cafe">
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Gió Cafe</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.6</div>
+                        <div class="cafe-quan"><i class="fas fa-map-marker-alt"></i> Bình Thạnh</div>
+                        <div class="cafe-review"><i class="far fa-comment-dots"></i> 65 đánh giá</div>
+                        <div class="delivery"><i class="fas fa-motorcycle"></i> Giao hàng tiêu chuẩn</div>
+                        <div class="tags"><span>☕ Wifi</span><span>🌿 Sân vườn</span><span>🤫 Yên tĩnh</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quán 11 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Thức COFFE" data-quan="Gò Vấp" data-id="11">
+                <div class="cafe-card" onclick="chonQuan(11)">
+                    <div class="img-box">
+                        <img src="./img/img11.jpg" alt="Thức COFFE">
+                        <div class="badge-hot">🌙 Mở 24/7</div>
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Thức COFFE</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.9</div>
+                        <div class="cafe-quan"><i class="fas fa-map-marker-alt"></i> Gò Vấp</div>
+                        <div class="cafe-review"><i class="far fa-comment-dots"></i> 98 đánh giá</div>
+                        <div class="delivery"><i class="fas fa-motorcycle"></i> Giao hàng tiêu chuẩn</div>
+                        <div class="tags"><span>☕ Wifi</span><span>🌇 View đẹp</span><span>🐟 Hồ cá</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quán 12 -->
+            <div class="col-lg-4 col-md-6 cafe-item" data-name="Tiệm Cà Phê Của Ngoại" data-quan="Phú Nhuận"
+                data-id="12">
+                <div class="cafe-card" onclick="chonQuan(12)">
+                    <div class="img-box">
+                        <img src="./img/img12.jpg" alt="Tiệm Cà Phê Của Ngoại">
+                        <div class="heart" onclick="event.stopPropagation()">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="cafe-content">
+                        <h3 class="cafe-name">Tiệm Cà Phê Của Ngoại</h3>
+                        <div class="cafe-rating"><i class="fas fa-star"></i> 4.8</div>
+                        <div class="cafe-quan"><i class="fas fa-map-marker-alt"></i> Phú Nhuận</div>
+                        <div class="cafe-review"><i class="far fa-comment-dots"></i> 85 đánh giá</div>
+                        <div class="delivery"><i class="fas fa-motorcycle"></i> Giao hàng tiêu chuẩn</div>
+                        <div class="tags"><span>☕ Wifi</span><span>📸 Vintage</span><span>🤫 Yên tĩnh</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="footer-placeholder"></div>
-
     <script src="../../js/main.js"></script>
+    <script>
+        function locQuan() {
+            const keyword = document.getElementById("searchInput").value.toLowerCase();
+            const quan = document.getElementById("locQuan").value;
+            const list = document.querySelectorAll(".cafe-item");
+            list.forEach(item => {
+                const ten = item.dataset.name.toLowerCase();
+                const khuVuc = item.dataset.quan;
+
+                if (ten.includes(keyword) && (quan === "all" || khuVuc === quan)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+        function chonQuan(id) {
+            const item = document.querySelector(`.cafe-item[data-id='${id}']`);
+            const ten = item.querySelector('.cafe-name').innerText;
+            const quan = item.querySelector('.cafe-quan').innerText.replace('📍 ', '').trim();
+            const rating = item.querySelector('.cafe-rating').innerText.replace('⭐ ', '').trim();
+            const review = item.querySelector('.cafe-review').innerText.replace(' đánh giá', '').replace(' reviews', '').trim();
+            const img = item.querySelector('img').src;
+            const cafeData = { id: id, ten: ten, quan: quan, rating: rating, review: review, img: img };
+            localStorage.setItem("selectedCafe", JSON.stringify(cafeData));
+            window.location.href = "../detailPage/detailPage.html";
+        }
+        document.querySelectorAll('.heart').forEach(heart => {
+            heart.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const icon = this.querySelector('i');
+                if (icon.classList.contains('far')) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                }
+            });
+        });
+    </script>
 </body>
+
 </html>

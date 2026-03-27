@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,149 +8,17 @@
     <link rel="stylesheet" href="../../component/footer/footer.css">
     <link rel="stylesheet" href="./userPage.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
     <div id="header-placeholder"></div>
-    <div class="container-fluid">
-        <div class="row">
-            <nav class="col-md-3 col-lg-2 d-md-block sidebar shadow-sm vh-100 sticky-top">
-                <div class="position-sticky pt-4">
-                    <div class="text-center mb-4">
-                        <h4 class="brand-name mb-4">Bean & Brew Co.</h4>
-                        <div class="avatar-container mb-2">
-                            <img src="https://i.pravatar.cc/150?u=lyly" alt="Avatar" class="rounded-circle shadow-sm"
-                                width="100">
-                        </div>
-                        <h5 class="user-name">Lyly Nguyen</h5>
-                        <span class="badge rounded-pill bg-gold">Gold Member</span>
-                    </div>
 
-                    <ul class="nav flex-column px-3 mt-4">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#"><i class="fa-solid fa-user me-2"></i> Account
-                                Info</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa-solid fa-clock-rotate-left me-2"></i> Order
-                                History</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa-solid fa-heart me-2"></i> Wishlist</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa-solid fa-ticket me-2"></i> My Vouchers</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fa-solid fa-seedling me-2"></i> Bean Points</a>
-                        </li>
-                        <li class="nav-item mt-5">
-                            <a class="nav-link text-danger" href="#"><i class="fa-solid fa-right-from-bracket me-2"></i>
-                                Logout</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
+    <main>
+        <h2>Chào mừng đến với UserPage</h2>
+    </main>
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-                <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-4 pb-2 mb-3 border-bottom">
-                    <h1 class="h4">Hồ sơ cá nhân</h1>
-                </div>
-
-                <div class="banner-card p-4 mb-4 d-flex justify-content-between align-items-center">
-                    <div>
-                        <h2>Good morning, Lyly Nguyen!</h2>
-                        <p>Hôm nay là một ngày tuyệt vời cho một ly Flat White.</p>
-                        <div class="point-badge">1,250 Bean Points</div>
-                    </div>
-                    <div class="member-qr text-center p-2 bg-white rounded shadow-sm">
-                        <i class="fa-solid fa-qrcode fa-4x text-dark"></i>
-                        <p class="mb-0 small text-muted">Mã thành viên</p>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-8">
-                        <div class="coffee-card p-4 mb-4">
-                            <h6 class="section-title mb-4">Theo dõi đơn hàng</h6>
-                            <div class="track-container d-flex justify-content-between">
-                                <div class="step active text-center"><i class="fa-solid fa-check-circle"></i>
-                                    <p>Đã đặt</p>
-                                </div>
-                                <div class="step active text-center"><i class="fa-solid fa-mug-hot"></i>
-                                    <p>Đang pha</p>
-                                </div>
-                                <div class="step text-center"><i class="fa-solid fa-truck"></i>
-                                    <p>Đang giao</p>
-                                </div>
-                                <div class="step text-center"><i class="fa-solid fa-face-smile"></i>
-                                    <p>Hoàn tất</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="coffee-card p-4">
-                            <h6 class="section-title mb-3">Đơn hàng gần đây</h6>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Mã đơn</th>
-                                            <th>Sản phẩm</th>
-                                            <th>Trạng thái</th>
-                                            <th>Tổng tiền</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>#02249</td>
-                                            <td>Espresso x2</td>
-                                            <td><span class="status-chip in-progress">Đang pha</span></td>
-                                            <td>120.000đ</td>
-                                            <td><button class="btn btn-sm btn-coffee">Chi tiết</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td>#02188</td>
-                                            <td>Latte Art x1</td>
-                                            <td><span class="status-chip completed">Đã giao</span></td>
-                                            <td>65.000đ</td>
-                                            <td><button class="btn btn-sm btn-coffee">Mua lại</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4">
-                        <div class="coffee-card p-4">
-                            <h6 class="section-title mb-3">Thông tin tài khoản</h6>
-                            <form>
-                                <div class="mb-3">
-                                    <label class="form-label small">Họ và tên</label>
-                                    <input type="text" class="form-control" value="Lyly Nguyen">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label small">Số điện thoại</label>
-                                    <input type="text" class="form-control" value="0901 234 xxx">
-                                </div>
-                                <button type="button" class="btn btn-coffee w-100">Cập nhật thông tin</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-    </div>
-    <div id="footer-placeholder"> </div>
+    <div id="footer-placeholder"></div>
 
     <script src="../../js/main.js"></script>
 </body>
-
 </html>
