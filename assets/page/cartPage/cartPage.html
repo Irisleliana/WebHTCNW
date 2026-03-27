@@ -1,24 +1,314 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giỏ hàng - DrinkHub</title>
+    <title>Giỏ hàng | DrinkHub</title>
+    <link rel="stylesheet" href="../../../index.css">
     <link rel="stylesheet" href="../../component/header/header.css">
     <link rel="stylesheet" href="../../component/footer/footer.css">
     <link rel="stylesheet" href="./cartPage.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
     <div id="header-placeholder"></div>
 
-    <main>
-        <h2>Chào mừng đến với CartPage</h2>
+    <main class="cart-page">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; color: #2c3e50; margin-bottom: 25px;">
+            <i class="fa-solid fa-cart-shopping" style="color: var(--primary);"></i> Giỏ hàng của bạn
+        </h2>
+
+        <div class="cart-layout">
+            <div class="cart-left-column">
+                <div class="cart-header">
+                    <span></span>
+                    <span>Sản phẩm</span>
+                    <span>Đơn giá</span>
+                    <span>Số lượng</span>
+                    <span>Số tiền</span>
+                    <span></span>
+                </div>
+
+                <div class="cart-items-container" id="cart-list">
+                    <div class="cart-item">
+                        <input type="checkbox" class="check-item" checked>
+                        <div class="product-info">
+                            <img src="../../images/milk-tea.jpg" alt="milk tea">
+                            <span class="product-name">Trà sữa trân châu</span>
+                        </div>
+                        <span class="price" data-value="35000">35.000đ</span>
+                        <div class="quantity-box">
+                            <button class="quantity-btn minus">-</button>
+                            <span class="qty">1</span>
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <span class="line-total">35.000đ</span>
+                        <i class="fa-regular fa-trash-can remove-btn"></i>
+                    </div>
+
+                    <div class="cart-item">
+                        <input type="checkbox" class="check-item" checked>
+                        <div class="product-info">
+                            <img src="../../images/coffee.jpg" alt="coffee">
+                            <span class="product-name">Cà phê sữa đá</span>
+                        </div>
+                        <span class="price" data-value="25000">25.000đ</span>
+                        <div class="quantity-box">
+                            <button class="quantity-btn minus">-</button>
+                            <span class="qty">2</span>
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <span class="line-total">50.000đ</span>
+                        <i class="fa-regular fa-trash-can remove-btn"></i>
+                    </div>
+
+                    <div class="cart-item">
+                        <input type="checkbox" class="check-item" checked>
+                        <div class="product-info">
+                            <img src="../../images/matcha.jpg" alt="matcha">
+                            <span class="product-name">Matcha Đá Xay</span>
+                        </div>
+                        <span class="price" data-value="45000">45.000đ</span>
+                        <div class="quantity-box">
+                            <button class="quantity-btn minus">-</button>
+                            <span class="qty">1</span>
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <span class="line-total">45.000đ</span>
+                        <i class="fa-regular fa-trash-can remove-btn"></i>
+                    </div>
+
+                    <div class="cart-item">
+                        <input type="checkbox" class="check-item" checked>
+                        <div class="product-info">
+                            <img src="../../images/peach-tea.jpg" alt="peach tea">
+                            <span class="product-name">Trà Đào Cam Sả</span>
+                        </div>
+                        <span class="price" data-value="40000">40.000đ</span>
+                        <div class="quantity-box">
+                            <button class="quantity-btn minus">-</button>
+                            <span class="qty">1</span>
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <span class="line-total">40.000đ</span>
+                        <i class="fa-regular fa-trash-can remove-btn"></i>
+                    </div>
+
+                    <div class="cart-item">
+                        <input type="checkbox" class="check-item" checked>
+                        <div class="product-info">
+                            <img src="../../images/americano.jpg" alt="Americano">
+                            <span class="product-name">Americano</span>
+                        </div>
+                        <span class="price" data-value="30000">30.000đ</span>
+                        <div class="quantity-box">
+                            <button class="quantity-btn minus">-</button>
+                            <span class="qty">1</span>
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <span class="line-total">30.000đ</span>
+                        <i class="fa-regular fa-trash-can remove-btn"></i>
+                    </div>
+                </div>
+
+                <div class="order-note">
+                    <label for="order-note-input">
+                        <i class="fa-solid fa-pen-to-square" style="color: var(--primary);"></i> Ghi chú cho DrinkHub
+                    </label>
+                    <textarea id="order-note-input" rows="3"
+                        placeholder="Ví dụ: Ít đường, bỏ riêng đá, hoặc lời nhắn cho cửa hàng..."></textarea>
+                </div>
+            </div>
+
+            <div class="summary-box">
+                <h3>Tóm tắt đơn hàng</h3>
+                <div class="summary-line">
+                    <span>Tạm tính</span>
+                    <span id="subtotal" style="font-weight: 600;">0đ</span>
+                </div>
+                <div class="summary-line">
+                    <span>Khuyến mãi</span>
+                    <button class="voucher-btn">Chọn mã giảm giá</button>
+                </div>
+                <div class="summary-line">
+                    <span>Phí giao hàng</span>
+                    <span id="shipping-fee">15.000đ</span>
+                </div>
+                <div class="summary-line total-line">
+                    <b>Tổng thanh toán</b>
+                    <b id="total" style="color: var(--primary); font-size: 1.4rem;">0đ</b>
+                </div>
+                <button class="checkout-btn" id="checkout-btn">THANH TOÁN NGAY</button>
+            </div>
+        </div>
     </main>
+
+    <div id="voucher-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin:0">Chọn mã giảm giá</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="voucher-list">
+                <div class="voucher-card recommended">
+                    <div class="v-left">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>BEST</span>
+                    </div>
+                    <div class="v-right">
+                        <p class="v-title">Giảm 20.000đ cho đơn từ 50k</p>
+                        <p class="v-expiry">HSD: 31/03/2026</p>
+                        <button class="apply-v-btn" data-discount="20000">Áp dụng</button>
+                    </div>
+                </div>
+
+                <div class="voucher-card">
+                    <div class="v-left" style="background: #27ae60;">
+                        <i class="fa-solid fa-truck-fast"></i>
+                        <span>SHIP</span>
+                    </div>
+                    <div class="v-right">
+                        <p class="v-title">Miễn phí vận chuyển (Tối đa 15k)</p>
+                        <p class="v-expiry">HSD: 30/04/2026</p>
+                        <button class="apply-v-btn" data-discount="15000">Áp dụng</button>
+                    </div>
+                </div>
+
+                <div class="voucher-card">
+                    <div class="v-left" style="background: #2980b9;">
+                        <i class="fa-solid fa-gift"></i>
+                        <span>NEW</span>
+                    </div>
+                    <div class="v-right">
+                        <p class="v-title">Giảm 10.000đ cho bạn mới</p>
+                        <p class="v-expiry">HSD: 31/12/2026</p>
+                        <button class="apply-v-btn" data-discount="10000">Áp dụng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <div class="success-body">
+                <i class="fa-solid fa-circle-check success-icon"></i>
+                <h2 style="margin-bottom: 10px; color: #2c3e50;">Đặt hàng thành công!</h2>
+                <p style="color: #7f8c8d;">Cảm ơn đã ủng hộ DrinkHub.</p>
+                <div class="order-info-card">
+                    <span>Tổng thanh toán:</span>
+                    <b id="success-total">0đ</b>
+                </div>
+                <button class="btn-done" id="btn-done">HOÀN TẤT</button>
+            </div>
+        </div>
+    </div>
 
     <div id="footer-placeholder"></div>
 
     <script src="../../js/main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modal = document.getElementById("voucher-modal");
+            const successModal = document.getElementById("success-modal");
+            const voucherBtn = document.querySelector(".voucher-btn");
+            const closeBtn = document.querySelector(".close-modal");
+            const checkoutBtn = document.getElementById("checkout-btn");
+            const cartList = document.getElementById("cart-list");
+            const btnDone = document.getElementById("btn-done");
+
+            let currentDiscount = 0;
+            const formatMoney = (num) => num.toLocaleString('vi-VN') + "đ";
+
+            function updateAll() {
+                let subtotal = 0;
+                const items = document.querySelectorAll(".cart-item");
+
+                items.forEach(item => {
+                    const price = parseInt(item.querySelector(".price").getAttribute("data-value")) || 0;
+                    const qty = parseInt(item.querySelector(".qty").innerText) || 1;
+                    const isChecked = item.querySelector(".check-item").checked;
+
+                    const lineTotal = price * qty;
+                    item.querySelector(".line-total").innerText = formatMoney(lineTotal);
+
+                    if (isChecked) subtotal += lineTotal;
+                });
+
+                document.getElementById("subtotal").innerText = formatMoney(subtotal);
+                const shipping = subtotal > 0 ? 15000 : 0;
+                const shippingElement = document.getElementById("shipping-fee");
+                if (shippingElement) shippingElement.innerText = formatMoney(shipping);
+
+                const finalTotal = Math.max(0, subtotal + shipping - currentDiscount);
+                document.getElementById("total").innerText = formatMoney(finalTotal);
+            }
+
+            cartList.addEventListener("click", function (e) {
+                const target = e.target;
+                const item = target.closest(".cart-item");
+                if (!item) return;
+
+                let qtySpan = item.querySelector(".qty");
+                let currentQty = parseInt(qtySpan.innerText);
+
+                if (target.classList.contains("plus")) {
+                    qtySpan.innerText = currentQty + 1;
+                } else if (target.classList.contains("minus") && currentQty > 1) {
+                    qtySpan.innerText = currentQty - 1;
+                } else if (target.classList.contains("remove-btn") || target.parentElement.classList.contains("remove-btn")) {
+                    if (confirm("Bạn chắc chắn muốn xóa món này?")) {
+                        item.remove();
+                    }
+                }
+                updateAll();
+            });
+
+            cartList.addEventListener("change", (e) => {
+                if (e.target.classList.contains("check-item")) updateAll();
+            });
+
+            if (voucherBtn) voucherBtn.onclick = () => modal.style.display = "flex";
+            if (closeBtn) closeBtn.onclick = () => modal.style.display = "none";
+
+            document.querySelectorAll(".apply-v-btn").forEach(btn => {
+                btn.onclick = function () {
+                    currentDiscount = parseInt(this.getAttribute("data-discount"));
+                    voucherBtn.innerHTML = `<i class="fa-solid fa-check"></i> Giảm ${formatMoney(currentDiscount)}`;
+                    voucherBtn.style.cssText = "background: #27ae60; color: white; border: none;";
+                    modal.style.display = "none";
+                    updateAll();
+                };
+            });
+
+            if (checkoutBtn) {
+                checkoutBtn.onclick = function () {
+                    const totalText = document.getElementById("total").innerText;
+                    const totalAmount = parseInt(totalText.replace(/[.\đ]/g, ""));
+
+                    if (totalAmount <= 0) {
+                        alert("Vui lòng chọn sản phẩm!");
+                        return;
+                    }
+
+                    checkoutBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                    setTimeout(() => {
+                        document.getElementById("success-total").innerText = totalText;
+                        successModal.style.display = "flex";
+                        checkoutBtn.innerHTML = "THANH TOÁN NGAY";
+                    }, 1000);
+                };
+            }
+
+            btnDone.onclick = () => successModal.style.display = "none";
+            updateAll();
+        });
+    </script>
 </body>
+
 </html>
