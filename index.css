@@ -6,7 +6,7 @@
     --text-gray: #7f8c8d;
     --bg-light: #faf8f5;
     --bg-white: #ffffff;
-    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow: 0 4px 15px rgba(0,0,0,0.1);
     --transition: all 0.3s ease;
 }
 
@@ -26,8 +26,8 @@ body {
 .hero-section {
     position: relative;
     min-height: 500px;
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4));
+             
     background-size: cover;
     background-position: center;
     display: flex;
@@ -61,7 +61,7 @@ body {
 }
 
 .hero-description {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255,255,255,0.85);
     font-size: 1rem;
     margin-bottom: 30px;
     line-height: 1.8;
@@ -98,8 +98,8 @@ body {
     height: 320px;
     border-radius: 50%;
     overflow: hidden;
-    border: 5px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 5px solid rgba(255,255,255,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
 
 .coffee-cup-wrapper img {
@@ -167,7 +167,7 @@ body {
 
 .cafe-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
 }
 
 .cafe-card:focus-visible {
@@ -251,3 +251,4 @@ body {
     background: var(--primary-dark);
     transform: translateY(-3px);
 }
+
