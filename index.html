@@ -14,7 +14,23 @@
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
         rel="stylesheet">
 
-    <link rel="stylesheet" href="../WebHTCNW-main/index.css">
+    <style>
+        .delivery-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff6b00;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -26,7 +42,9 @@
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <span class="hero-subtitle">NỀN TẢNG REVIEW & ĐẶT MÓN TOÀN DIỆN</span>
+
                 <h1 class="hero-title">Từ Review Chân Thực<br>Đến Ly Nước Trên Tay</h1>
+
                 <p class="hero-description">
                     Đừng đánh cược vị giác của bạn. Khám phá hàng ngàn đánh giá thực tế từ cộng đồng DrinkHub để chọn
                     đúng món "chân ái". Ưng ý quán nào? Bấm đặt hàng ngay và nhận nước chỉ trong 30 phút.
@@ -43,16 +61,59 @@
         </section>
 
         <section class="featured-section">
-            <h2 class="section-title">Khám phá những quán Caffe ngon tại Sài Gòn City</h2>
+            <h2 class="section-title">Quán Nhiều Review Nhất</h2>
 
             <div class="cafe-slider">
                 <button class="slider-btn prev-btn" id="prevBtn">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
 
-                <div class="cafe-cards" id="cafeCardsContainer"></div>
+                <div class="cafe-cards">
+                    <div class="cafe-card">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 20p</span>
+                            <img src="" alt="">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 128</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating">
+                                <i class="fa-solid fa-star"></i> 4.8
+                            </div>
+                            <h3 class="cafe-name">Thức Coffee</h3>
+                        </div>
+                    </div>
 
-                <button class="slider-btn next-btn" id="nextBtn">
+                    <div class="cafe-card">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 15p</span>
+                            <img src="" alt="">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 85</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating">
+                                <i class="fa-solid fa-star"></i> 4.3
+                            </div>
+                            <h3 class="cafe-name">LAVA Coffee</h3>
+                        </div>
+                    </div>
+
+                    <div class="cafe-card">
+                        <div class="cafe-image">
+                            <span class="delivery-badge" style="background-color: #27ae60;"><i
+                                    class="fa-solid fa-tag"></i> Freeship</span>
+                            <img src="" alt="">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 204</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating">
+                                <i class="fa-solid fa-star"></i> 4.9
+                            </div>
+                            <h3 class="cafe-name">Saigon Chic</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="slider-btn next-btn">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
             </div>
