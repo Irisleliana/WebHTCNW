@@ -1,0 +1,71 @@
+/* Modal Background - Cấu hình quan trọng để hiện đè lên màn hình */
+.modal {
+  display: none;
+  /* Mặc định ẩn */
+  position: fixed;
+  /* Cố định trên màn hình, không trôi khi cuộn trang */
+  z-index: 9999;
+  /* Số này phải thật lớn để nằm trên tất cả các lớp khác */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Phủ kín chiều rộng */
+  height: 100%;
+  /* Phủ kín chiều cao */
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Làm tối nền phía sau */
+
+  /* Căn giữa nội dung bên trong */
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  width: 450px;
+  max-width: 90%;
+  /* Đảm bảo trên điện thoại không bị tràn */
+  position: relative;
+  /* Để làm mốc cho các phần tử bên trong */
+  animation: slideDown 0.3s ease-out;
+  /* Hiệu ứng rớt xuống từ trên */
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  /* Tạo độ nổi */
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Các phần CSS Voucher Card bạn giữ nguyên như cũ là đẹp rồi */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.close-modal {
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  line-height: 1;
+}
+
+.close-modal:hover {
+  color: var(--primary);
+}
+
+/* Copy lại phần Voucher Card của bạn vào dưới này... */

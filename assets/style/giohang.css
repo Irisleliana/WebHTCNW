@@ -1,0 +1,382 @@
+:root {
+  --primary: #d35400;
+  --primary-dark: #b34700;
+  --primary-soft: #fff5ee;
+  --success: #27ae60;
+  --success-dark: #219150;
+  --gray-light: #f8f9fa;
+  --text-dark: #2c3e50;
+  --text-gray: #7f8c8d;
+  --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+body {
+  background: #fdfaf7;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  color: var(--text-dark);
+}
+
+/* --- BỐ CỤC TRANG --- */
+.cart-page {
+  padding: 40px 80px;
+  max-width: 1300px;
+  margin: auto;
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+  align-items: start;
+}
+
+/* --- DANH SÁCH SẢN PHẨM & THANH CUỘN --- */
+.cart-items-container {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 20px;
+}
+
+.cart-items-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-items-container::-webkit-scrollbar-thumb {
+  background-color: #e0e0e0;
+  border-radius: 10px;
+}
+
+.cart-header,
+.cart-item {
+  display: grid;
+  grid-template-columns: 50px 3fr 1.2fr 1.2fr 1.2fr 50px;
+  align-items: center;
+  padding: 15px 20px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: var(--shadow-sm);
+}
+
+.cart-header {
+  font-weight: 600;
+  color: #555;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.product-info img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.product-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+/* --- ĐIỀU KHIỂN SỐ LƯỢNG --- */
+.quantity-box {
+  display: flex;
+  align-items: center;
+  background: var(--gray-light);
+  border-radius: 8px;
+  padding: 2px;
+  width: fit-content;
+}
+
+.quantity-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: white;
+  color: var(--primary);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.quantity-btn:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.qty {
+  width: 35px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.remove-btn {
+  color: #e74c3c;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1.2rem;
+  transition: 0.2s;
+}
+
+/* --- GHI CHÚ --- */
+.order-note {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  margin-top: 10px;
+}
+
+.order-note textarea {
+  width: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: inherit;
+  resize: none;
+  background: #fcfcfc;
+  box-sizing: border-box;
+}
+
+/* --- BẢNG TỔNG KẾT --- */
+.summary-box {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.summary-box h3 {
+  margin-top: 0;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.checkout-btn:hover {
+  background: var(--primary-dark);
+  box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3);
+}
+
+/* --- HỆ THỐNG MODAL (CHUNG) --- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  /* Tăng padding để thoáng hơn */
+  border-radius: 20px;
+  width: 450px;
+  max-width: 90%;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* --- CHI TIẾT MODAL THÀNH CÔNG --- */
+.success-body {
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 5rem;
+  /* Tăng kích thước icon */
+  color: var(--success);
+  margin-bottom: 25px;
+  display: block;
+}
+
+.success-body h2 {
+  font-size: 1.7rem;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.success-body p {
+  margin-bottom: 30px;
+  line-height: 1.6;
+  color: #7f8c8d;
+}
+
+.order-info-card {
+  background: #f9fbf9;
+  border: 1px dashed var(--success);
+  /* Viền nét đứt sang trọng hơn */
+  border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 35px;
+  /* Giãn cách với nút bấm */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-info-card span {
+  font-weight: 500;
+  color: #555;
+}
+
+.order-info-card b {
+  font-size: 1.3rem;
+  color: var(--success);
+}
+
+.btn-done {
+  width: 100%;
+  padding: 16px;
+  background: var(--success);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+}
+
+.btn-done:hover {
+  background: var(--success-dark);
+  transform: translateY(-2px);
+}
+
+/* --- VOUCHER CARDS --- */
+.voucher-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding: 10px 5px;
+}
+
+.voucher-card {
+  display: flex;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  transition: 0.3s;
+  background: white;
+}
+
+.v-left {
+  background: var(--primary);
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  font-weight: bold;
+}
+
+.v-right {
+  padding: 15px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.apply-v-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.modal-content {
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-gray);
+  cursor: pointer;
+  line-height: 1;
+  transition: 0.2s;
+}
+
+.close-modal:hover {
+  color: var(--primary);
+}
+
+.voucher-btn {
+  background: var(--primary-soft);
+  color: var(--primary);
+  border: 1px dashed var(--primary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: 0.3s;
+  outline: none;
+}
+
+.voucher-btn:hover {
+  background: var(--primary);
+  color: white;
+  border-style: solid;
+}

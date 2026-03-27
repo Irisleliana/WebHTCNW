@@ -1,22 +1,34 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DrinkHub - Review Thật & Đặt Món Nhanh</title>
+    <title>DrinkHub - Review Thật & Đặt Món Nhanh</title> 
     <link rel="stylesheet" href="./index.css">
-    <link rel="stylesheet" href="./assets/component/footer/footer.css">
-    <link rel="stylesheet" href="./assets/component/header/header.css">
-
+    <link rel="stylesheet" href="./assets/style/header.css">
+    <link rel="stylesheet" href="./assets/style/footer.css">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="../WebHTCNW-main/index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        .delivery-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #ff6b00; /* Màu cam đặc trưng của đặt món */
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+    </style>
 </head>
-
 <body>
 
     <div id="header-placeholder"></div>
@@ -26,12 +38,14 @@
             <div class="hero-overlay"></div>
             <div class="hero-content">
                 <span class="hero-subtitle">NỀN TẢNG REVIEW & ĐẶT MÓN TOÀN DIỆN</span>
+                
                 <h1 class="hero-title">Từ Review Chân Thực<br>Đến Ly Nước Trên Tay</h1>
+                
                 <p class="hero-description">
-                    Đừng đánh cược vị giác của bạn. Khám phá hàng ngàn đánh giá thực tế từ cộng đồng DrinkHub để chọn
-                    đúng món "chân ái". Ưng ý quán nào? Bấm đặt hàng ngay và nhận nước chỉ trong 30 phút.
+                    Đừng đánh cược vị giác của bạn. Khám phá hàng ngàn đánh giá thực tế từ cộng đồng DrinkHub để chọn đúng món "chân ái". Ưng ý quán nào? Bấm đặt hàng ngay và nhận nước chỉ trong 30 phút.
                 </p>
-                <a href="./assets/page/listPage/listPage.html" class="btn-primary">
+                
+                <a href="#" class="btn-primary">
                     Xem Review & Đặt Món <i class="fa-solid fa-motorcycle"></i>
                 </a>
             </div>
@@ -43,63 +57,70 @@
         </section>
 
         <section class="featured-section">
-            <h2 class="section-title">Khám phá những quán Caffe ngon tại Sài Gòn City</h2>
-
+            <h2 class="section-title">Quán Nhiều Review Nhất</h2>
+            
             <div class="cafe-slider">
-                <button class="slider-btn prev-btn" id="prevBtn">
+                <button class="slider-btn prev-btn">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
-
-                <div class="cafe-cards" id="cafeCardsContainer"></div>
-
-                <button class="slider-btn next-btn" id="nextBtn">
+                
+                <div class="cafe-cards">
+                    <div class="cafe-card">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 20p</span>
+                            <img src="" alt="">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 128</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating">
+                                <i class="fa-solid fa-star"></i> 4.8
+                            </div>
+                            <h3 class="cafe-name">Thức Coffee</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="cafe-card">
+                        <div class="cafe-image">
+                            <span class="delivery-badge"><i class="fa-solid fa-bolt"></i> Giao 15p</span>
+                            <img src="" alt="">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 85</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating">
+                                <i class="fa-solid fa-star"></i> 4.3
+                            </div>
+                            <h3 class="cafe-name">LAVA Coffee</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="cafe-card">
+                        <div class="cafe-image">
+                             <span class="delivery-badge" style="background-color: #27ae60;"><i class="fa-solid fa-tag"></i> Freeship</span>
+                            <img src="" alt="">
+                            <span class="cafe-badge"><i class="fa-solid fa-comment"></i> 204</span>
+                        </div>
+                        <div class="cafe-info">
+                            <div class="cafe-rating">
+                                <i class="fa-solid fa-star"></i> 4.9
+                            </div>
+                            <h3 class="cafe-name">Saigon Chic</h3>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="slider-btn next-btn">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
             </div>
         </section>
     </main>
 
-    <button class="floating-search-btn" onclick="window.location.href='./pages/listPage/listPage.html'">
+    <button class="floating-search-btn">
         <i class="fa-solid fa-search"></i> Bạn đang thèm gì?
     </button>
 
     <div id="footer-placeholder"></div>
 
     <script src="./assets/js/main.js"></script>
-    <script>
-        const slider = document.getElementById('cafeCardsContainer');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        if (prevBtn && nextBtn && slider) {
-            prevBtn.addEventListener('click', () => {
-                slider.scrollBy({
-                    left: -300,
-                    behavior: 'smooth'
-                });
-            });
-
-            nextBtn.addEventListener('click', () => {
-                slider.scrollBy({
-                    left: 300,
-                    behavior: 'smooth'
-                });
-            });
-        }
-        function goToCafeDetail(id, name, district, rating, reviewCount, imageUrl) {
-            const cafeData = {
-                id: id,
-                ten: name,
-                quan: district,
-                rating: rating,
-                review: reviewCount,
-                img: imageUrl
-            };
-            localStorage.setItem("selectedCafe", JSON.stringify(cafeData));
-            window.location.href = "./pages/listPage/listPage.html";
-        }
-        window.goToCafeDetail = goToCafeDetail;
-    </script>
 </body>
-
 </html>
