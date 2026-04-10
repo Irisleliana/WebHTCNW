@@ -365,3 +365,29 @@ body {
     color: white;
     border-style: solid;
 }
+
+.cart-header, .cart-item {
+    display: grid;
+    /* Cấu trúc: Checkbox | Sản phẩm | Size | Đơn giá | Số lượng | Tổng | Thùng rác */
+    grid-template-columns: 40px 2.5fr 0.8fr 1.2fr 1.2fr 1.2fr 40px;
+    gap: 10px;
+    align-items: center;
+    padding: 15px 10px;
+}
+
+.size-text, 
+.cart-header span:nth-child(3),
+.price, 
+.quantity-box, 
+.line-total {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.product-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+}
