@@ -26,12 +26,11 @@
         <div class="cart-layout">
             <div class="cart-left-column">
                 <div class="cart-header">
-                    <span></span>
-                    <span>Sản phẩm</span>
-                    <span>Đơn giá</span>
-                    <span>Số lượng</span>
-                    <span>Số tiền</span>
-                    <span></span>
+                     <span></span> <span>Sản phẩm</span>
+                     <span>Size</span> <span>Đơn giá</span>
+                     <span>Số lượng</span>
+                     <span>Số tiền</span>
+                     <span></span> 
                 </div>
 
                 <div class="cart-items-container" id="cart-list">
@@ -41,7 +40,7 @@
                             <img src="../../../img/anhts.jpg" alt="milk tea">
                             <span class="product-name">Trà sữa trân châu</span>
                         </div>
-                        <span class="price" data-value="35000">35.000đ</span>
+                        <span class="size-text">M</span> <span class="price" data-value="35000">35.000đ</span>
                         <div class="quantity-box">
                             <button class="quantity-btn minus">-</button>
                             <span class="qty">1</span>
@@ -57,7 +56,7 @@
                             <img src="../../../img/anhcf.jpg" alt="coffee">
                             <span class="product-name">Cà phê sữa đá</span>
                         </div>
-                        <span class="price" data-value="25000">25.000đ</span>
+                        <span class="size-text">L</span> <span class="price" data-value="25000">25.000đ</span>
                         <div class="quantity-box">
                             <button class="quantity-btn minus">-</button>
                             <span class="qty">2</span>
@@ -73,7 +72,7 @@
                             <img src="../../../img/anhmcha.jpg" alt="matcha">
                             <span class="product-name">Matcha Đá Xay</span>
                         </div>
-                        <span class="price" data-value="45000">45.000đ</span>
+                        <span class="size-text">M</span> <span class="price" data-value="45000">45.000đ</span>
                         <div class="quantity-box">
                             <button class="quantity-btn minus">-</button>
                             <span class="qty">1</span>
@@ -89,7 +88,7 @@
                             <img src="../../../img/anhtd.jpg" alt="peach tea">
                             <span class="product-name">Trà Đào Cam Sả</span>
                         </div>
-                        <span class="price" data-value="40000">40.000đ</span>
+                        <span class="size-text">L</span> <span class="price" data-value="40000">40.000đ</span>
                         <div class="quantity-box">
                             <button class="quantity-btn minus">-</button>
                             <span class="qty">1</span>
@@ -105,7 +104,7 @@
                             <img src="../../../img/anhamericano.jpg" alt="Americano">
                             <span class="product-name">Americano</span>
                         </div>
-                        <span class="price" data-value="30000">30.000đ</span>
+                        <span class="size-text">S</span> <span class="price" data-value="30000">30.000đ</span>
                         <div class="quantity-box">
                             <button class="quantity-btn minus">-</button>
                             <span class="qty">1</span>
@@ -143,7 +142,7 @@
                     <b>Tổng thanh toán</b>
                     <b id="total" style="color: var(--primary); font-size: 1.4rem;">0đ</b>
                 </div>
-                <button class="checkout-btn" id="checkout-btn">THANH TOÁN NGAY</button>
+                <button class="checkout-btn" id="checkout-btn">ĐẶT NGAY</button>
             </div>
         </div>
     </main>
@@ -300,7 +299,7 @@
                     setTimeout(() => {
                         document.getElementById("success-total").innerText = totalText;
                         successModal.style.display = "flex";
-                        checkoutBtn.innerHTML = "THANH TOÁN NGAY";
+                        checkoutBtn.innerHTML = "ĐẶT NGAY";
                     }, 1000);
                 };
             }
