@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Giỏ hàng | DrinkHub</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../index.css">
     <link rel="stylesheet" href="../../component/header/header.css">
     <link rel="stylesheet" href="../../component/footer/footer.css">
@@ -35,84 +36,8 @@
                 </div>
 
                 <div class="cart-items-container" id="cart-list">
-                    <div class="cart-item">
-                        <input type="checkbox" class="check-item" checked>
-                        <div class="product-info">
-                            <img src="../../images/milk-tea.jpg" alt="milk tea">
-                            <span class="product-name">Trà sữa trân châu</span>
-                        </div>
-                        <span class="price" data-value="35000">35.000đ</span>
-                        <div class="quantity-box">
-                            <button class="quantity-btn minus">-</button>
-                            <span class="qty">1</span>
-                            <button class="quantity-btn plus">+</button>
-                        </div>
-                        <span class="line-total">35.000đ</span>
-                        <i class="fa-regular fa-trash-can remove-btn"></i>
-                    </div>
-
-                    <div class="cart-item">
-                        <input type="checkbox" class="check-item" checked>
-                        <div class="product-info">
-                            <img src="../../images/coffee.jpg" alt="coffee">
-                            <span class="product-name">Cà phê sữa đá</span>
-                        </div>
-                        <span class="price" data-value="25000">25.000đ</span>
-                        <div class="quantity-box">
-                            <button class="quantity-btn minus">-</button>
-                            <span class="qty">2</span>
-                            <button class="quantity-btn plus">+</button>
-                        </div>
-                        <span class="line-total">50.000đ</span>
-                        <i class="fa-regular fa-trash-can remove-btn"></i>
-                    </div>
-
-                    <div class="cart-item">
-                        <input type="checkbox" class="check-item" checked>
-                        <div class="product-info">
-                            <img src="../../images/matcha.jpg" alt="matcha">
-                            <span class="product-name">Matcha Đá Xay</span>
-                        </div>
-                        <span class="price" data-value="45000">45.000đ</span>
-                        <div class="quantity-box">
-                            <button class="quantity-btn minus">-</button>
-                            <span class="qty">1</span>
-                            <button class="quantity-btn plus">+</button>
-                        </div>
-                        <span class="line-total">45.000đ</span>
-                        <i class="fa-regular fa-trash-can remove-btn"></i>
-                    </div>
-
-                    <div class="cart-item">
-                        <input type="checkbox" class="check-item" checked>
-                        <div class="product-info">
-                            <img src="../../images/peach-tea.jpg" alt="peach tea">
-                            <span class="product-name">Trà Đào Cam Sả</span>
-                        </div>
-                        <span class="price" data-value="40000">40.000đ</span>
-                        <div class="quantity-box">
-                            <button class="quantity-btn minus">-</button>
-                            <span class="qty">1</span>
-                            <button class="quantity-btn plus">+</button>
-                        </div>
-                        <span class="line-total">40.000đ</span>
-                        <i class="fa-regular fa-trash-can remove-btn"></i>
-                    </div>
-
-                    <div class="cart-item">
-                        <input type="checkbox" class="check-item" checked>
-                        <div class="product-info">
-                            <img src="../../images/americano.jpg" alt="Americano">
-                            <span class="product-name">Americano</span>
-                        </div>
-                        <span class="price" data-value="30000">30.000đ</span>
-                        <div class="quantity-box">
-                            <button class="quantity-btn minus">-</button>
-                            <span class="qty">1</span>
-                            <button class="quantity-btn plus">+</button>
-                        </div>
-                        <span class="line-total">30.000đ</span>
-                        <i class="fa-regular fa-trash-can remove-btn"></i>
+                    <div id="cart-empty" class="cart-empty" hidden>
+                        Giỏ hàng đang rỗng. Hãy vào trang chi tiết quán để đặt món nhé.
                     </div>
                 </div>
 
@@ -148,9 +73,9 @@
         </div>
     </main>
 
-    <div id="voucher-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
+    <div id="voucher-modal" class="dh-modal">
+        <div class="dh-modal-content">
+            <div class="dh-modal-header">
                 <h3 style="margin:0">Chọn mã giảm giá</h3>
                 <span class="close-modal">&times;</span>
             </div>
@@ -194,8 +119,8 @@
         </div>
     </div>
 
-    <div id="success-modal" class="modal">
-        <div class="modal-content">
+    <div id="success-modal" class="dh-modal">
+        <div class="dh-modal-content">
             <div class="success-body">
                 <i class="fa-solid fa-circle-check success-icon"></i>
                 <h2 style="margin-bottom: 10px; color: #2c3e50;">Đặt hàng thành công!</h2>
@@ -211,6 +136,7 @@
 
     <div id="footer-placeholder"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../../js/main.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -220,10 +146,123 @@
             const closeBtn = document.querySelector(".close-modal");
             const checkoutBtn = document.getElementById("checkout-btn");
             const cartList = document.getElementById("cart-list");
+            const cartEmpty = document.getElementById('cart-empty');
             const btnDone = document.getElementById("btn-done");
 
             let currentDiscount = 0;
-            const formatMoney = (num) => num.toLocaleString('vi-VN') + "đ";
+            const formatMoney = (num) => (num || 0).toLocaleString('vi-VN') + "đ";
+
+            const CART_KEY = 'drinkhub_cart';
+
+            const safeParseJson = (text, fallback) => {
+                try {
+                    return JSON.parse(text);
+                } catch {
+                    return fallback;
+                }
+            };
+
+            const loadCart = () => {
+                const raw = localStorage.getItem(CART_KEY);
+                const cart = safeParseJson(raw, []);
+                return Array.isArray(cart) ? cart : [];
+            };
+
+            const saveCart = (cart) => {
+                localStorage.setItem(CART_KEY, JSON.stringify(cart));
+                if (window.DrinkHub && typeof window.DrinkHub.updateCartBadge === 'function') {
+                    window.DrinkHub.updateCartBadge();
+                }
+            };
+
+            const escapeHtml = (str) => {
+                return String(str ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            };
+
+            const buildImageCandidates = (rawImg) => {
+                const raw = (rawImg || '').trim();
+                const isAbsolute = /^(https?:|file:|data:|blob:)/i.test(raw);
+                const candidates = [];
+                if (!raw) return candidates;
+
+                if (isAbsolute) {
+                    candidates.push(raw);
+                    return candidates;
+                }
+
+                const filename = raw.split('/').pop();
+                candidates.push(raw);
+                if (filename) {
+                    candidates.push(`../../../img/${filename}`);
+                    candidates.push(`../listPage/img/${filename}`);
+                }
+                return candidates;
+            };
+
+            const renderCart = () => {
+                const cart = loadCart();
+                const hasItems = cart.length > 0;
+
+                if (cartEmpty) {
+                    cartEmpty.hidden = hasItems;
+                }
+
+                // Remove all rendered items but keep the empty state node
+                Array.from(cartList.querySelectorAll('.cart-item')).forEach(el => el.remove());
+
+                if (!hasItems) {
+                    updateAll();
+                    return;
+                }
+
+                const html = cart.map(item => {
+                    const id = escapeHtml(item.id);
+                    const name = escapeHtml(item.name);
+                    const price = Number(item.price) || 0;
+                    const qty = Math.max(1, Number(item.qty) || 1);
+                    const imgAlt = name || 'Đồ uống';
+
+                    return `
+                        <div class="cart-item" data-id="${id}">
+                            <input type="checkbox" class="check-item" checked>
+                            <div class="product-info">
+                                <img class="cart-product-img" data-img="${escapeHtml(item.img || '')}" alt="${imgAlt}">
+                                <span class="product-name">${name}</span>
+                            </div>
+                            <span class="price" data-value="${price}">${formatMoney(price)}</span>
+                            <div class="quantity-box">
+                                <button class="quantity-btn minus" type="button">-</button>
+                                <span class="qty">${qty}</span>
+                                <button class="quantity-btn plus" type="button">+</button>
+                            </div>
+                            <span class="line-total">${formatMoney(price * qty)}</span>
+                            <i class="fa-regular fa-trash-can remove-btn" role="button" aria-label="Xóa"></i>
+                        </div>
+                    `;
+                }).join('');
+
+                cartList.insertAdjacentHTML('beforeend', html);
+
+                // Resolve images with fallbacks
+                cartList.querySelectorAll('img.cart-product-img').forEach(img => {
+                    const raw = img.getAttribute('data-img') || '';
+                    const candidates = buildImageCandidates(raw);
+                    let idx = 0;
+                    const tryNext = () => {
+                        if (idx >= candidates.length) return;
+                        img.src = candidates[idx++];
+                    };
+                    img.onerror = () => tryNext();
+                    tryNext();
+                });
+
+                updateAll();
+            };
 
             function updateAll() {
                 let subtotal = 0;
@@ -249,21 +288,42 @@
                 document.getElementById("total").innerText = formatMoney(finalTotal);
             }
 
+            const updateCartItemQty = (id, nextQty) => {
+                const cart = loadCart();
+                const idx = cart.findIndex(x => String(x.id) === String(id));
+                if (idx === -1) return;
+                cart[idx].qty = Math.max(1, Number(nextQty) || 1);
+                saveCart(cart);
+            };
+
+            const removeCartItem = (id) => {
+                const cart = loadCart().filter(x => String(x.id) !== String(id));
+                saveCart(cart);
+            };
+
             cartList.addEventListener("click", function (e) {
                 const target = e.target;
                 const item = target.closest(".cart-item");
                 if (!item) return;
+
+                const id = item.getAttribute('data-id');
 
                 let qtySpan = item.querySelector(".qty");
                 let currentQty = parseInt(qtySpan.innerText);
 
                 if (target.classList.contains("plus")) {
                     qtySpan.innerText = currentQty + 1;
+                    updateCartItemQty(id, currentQty + 1);
                 } else if (target.classList.contains("minus") && currentQty > 1) {
                     qtySpan.innerText = currentQty - 1;
+                    updateCartItemQty(id, currentQty - 1);
                 } else if (target.classList.contains("remove-btn") || target.parentElement.classList.contains("remove-btn")) {
                     if (confirm("Bạn chắc chắn muốn xóa món này?")) {
+                        removeCartItem(id);
                         item.remove();
+                        if (!loadCart().length && cartEmpty) {
+                            cartEmpty.hidden = false;
+                        }
                     }
                 }
                 updateAll();
@@ -306,7 +366,7 @@
             }
 
             btnDone.onclick = () => successModal.style.display = "none";
-            updateAll();
+            renderCart();
         });
     </script>
 </body>

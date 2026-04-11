@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi tiết quán</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../component/header/header.css">
+    <link rel="stylesheet" href="../../component/footer/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="../detailPage/detailPage.css">
 </head>
 
 <body>
-    <div class="container py-4">
+    <div id="header-placeholder"></div>
+
+    <main>
+        <div class="container py-4">
         <a href="../listPage/listPage.html" class="back-btn"><i class="fas fa-arrow-left"></i> Quay lại</a>
 
         <img id="img" class="cafe-img">
@@ -53,7 +58,12 @@
 
         <div class="tab-content">
             <div class="tab-pane fade show active" id="desc">
-                <div class="content-box" id="descText"></div>
+                <div class="content-box">
+                    <div id="descText"></div>
+                    <hr class="my-4">
+                    <h5 class="mb-3">Đánh giá nổi bật</h5>
+                    <div id="fakeReviews" class="list-group"></div>
+                </div>
             </div>
             <div class="tab-pane fade" id="menu">
                 <div class="content-box" id="menuList"></div>
@@ -67,18 +77,122 @@
             <button class="btn-fav" id="favBtn"><i class="far fa-heart"></i> Yêu thích</button>
             <button class="btn-share" id="shareBtn"><i class="fas fa-share-alt"></i> Chia sẻ</button>
         </div>
-    </div>
+        </div>
+    </main>
+
+    <div id="footer-placeholder"></div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../js/main.js"></script>
     <script>
         const data = JSON.parse(localStorage.getItem("selectedCafe"));
 
         if (data) {
-            document.getElementById('img').src = data.img;
+            const imgEl = document.getElementById('img');
+
+            const rawImg = (data.img || '').trim();
+            const isAbsolute = /^(https?:|file:|data:|blob:)/i.test(rawImg);
+
+            const candidates = [];
+            if (rawImg) {
+                if (isAbsolute) {
+                    candidates.push(rawImg);
+                } else {
+                    // Handle older stored values from different pages
+                    const filename = rawImg.split('/').pop();
+
+                    // 1) Relative as-is (might work if already correct)
+                    candidates.push(rawImg);
+
+                    // 2) Image folder at project root (detailPage is assets/page/detailPage)
+                    if (filename) {
+                        candidates.push(`../../../img/${filename}`);
+                    }
+
+                    // 3) Image folder under listPage (detailPage -> ../listPage/img)
+                    if (filename) {
+                        candidates.push(`../listPage/img/${filename}`);
+                    }
+                }
+            }
+
+            let candidateIndex = 0;
+            const tryNextImage = () => {
+                if (!imgEl || candidateIndex >= candidates.length) {
+                    return;
+                }
+                imgEl.src = candidates[candidateIndex++];
+            };
+
+            if (imgEl) {
+                imgEl.onerror = () => tryNextImage();
+            }
+            tryNextImage();
+
             document.getElementById('name').innerText = data.ten;
             document.getElementById('rating').innerText = data.rating;
             document.getElementById('review').innerText = data.review;
             document.getElementById('quan').innerText = data.quan;
             document.getElementById('descText').innerHTML = `${data.ten} là quán cafe tại ${data.quan}, đạt ${data.rating} sao với ${data.review} đánh giá. Không gian thoáng mát, phù hợp làm việc và thư giãn.`;
+
+            // Review ảo (dùng chung cho tất cả quán)
+            const renderStars = count => {
+                const full = '<i class="fas fa-star text-warning"></i>';
+                const empty = '<i class="far fa-star text-warning"></i>';
+                return full.repeat(count) + empty.repeat(5 - count);
+            };
+
+            const sharedReviews = [
+                {
+                    name: 'Minh Anh',
+                    stars: 5,
+                    date: '05/04/2026',
+                    content: 'Không gian ổn, yên tĩnh, phù hợp làm việc. Nhân viên dễ thương.'
+                },
+                {
+                    name: 'Tuấn Kiệt',
+                    stars: 4,
+                    date: '02/04/2026',
+                    content: 'Đồ uống ngon, giá hợp lý. Sẽ quay lại lần sau.'
+                },
+                {
+                    name: 'Ngọc Hân',
+                    stars: 5,
+                    date: '28/03/2026',
+                    content: 'Quán sạch sẽ, view đẹp. Đi cuối tuần hơi đông một chút.'
+                },
+                {
+                    name: 'Gia Bảo',
+                    stars: 4,
+                    date: '21/03/2026',
+                    content: 'Mình thích nhất là không khí ở đây, rất chill. Wifi mạnh.'
+                },
+                {
+                    name: 'Quỳnh Như',
+                    stars: 5,
+                    date: '15/03/2026',
+                    content: 'Phục vụ nhanh, món lên đều. Tổng thể đáng trải nghiệm.'
+                }
+            ];
+
+            const fakeReviewsEl = document.getElementById('fakeReviews');
+            if (fakeReviewsEl) {
+                let html = '';
+                sharedReviews.forEach(r => {
+                    html += `
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+                                <div>
+                                    <div class="fw-semibold">${r.name}</div>
+                                    <div class="small">${renderStars(r.stars)}</div>
+                                </div>
+                                <div class="small text-muted">${r.date}</div>
+                            </div>
+                            <div class="mt-2">${r.content}</div>
+                        </div>
+                    `;
+                });
+                fakeReviewsEl.innerHTML = html;
+            }
 
             // Hiển thị tiện ích từ tags
             if (data.tags) {
@@ -91,12 +205,110 @@
                 2: ['Espresso 55k', 'Latte 65k', 'Matcha 70k'],
                 3: ['Cà phê đen 49k', 'Croissant 55k', 'Pasta 129k']
             };
+
+            const CART_KEY = 'drinkhub_cart';
+            const escapeHtml = (str) => {
+                return String(str ?? '')
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            };
+            const escapeAttr = (str) => escapeHtml(str).replace(/\s+/g, ' ').trim();
+
+            const parseMenuLine = (line) => {
+                const text = String(line || '').trim();
+                // Expected format: "Tên món 39k"
+                const m1 = text.match(/^(.*)\s(\d+)\s*k$/i);
+                if (m1) {
+                    const name = m1[1].trim();
+                    const price = Number(m1[2]) * 1000;
+                    return { name, price, priceLabel: `${Number(m1[2])}k` };
+                }
+
+                // Fallback: last number is price (VND)
+                const m2 = text.match(/^(.*)\s(\d+)\s*(?:đ|d)?$/i);
+                if (m2) {
+                    const name = m2[1].trim();
+                    const price = Number(m2[2]);
+                    return { name, price, priceLabel: price.toLocaleString('vi-VN') + 'đ' };
+                }
+
+                return { name: text, price: 0, priceLabel: '' };
+            };
+
+            const loadCart = () => {
+                try {
+                    const cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+                    return Array.isArray(cart) ? cart : [];
+                } catch {
+                    return [];
+                }
+            };
+            const saveCart = (cart) => {
+                localStorage.setItem(CART_KEY, JSON.stringify(cart));
+                if (window.DrinkHub && typeof window.DrinkHub.updateCartBadge === 'function') {
+                    window.DrinkHub.updateCartBadge();
+                }
+            };
+            const addToCart = ({ cafeId, cafeName, itemName, price, img }) => {
+                const cart = loadCart();
+                const id = `${String(cafeId ?? cafeName ?? 'cafe')}::${String(itemName)}`;
+                const idx = cart.findIndex(x => String(x.id) === String(id));
+                if (idx >= 0) {
+                    cart[idx].qty = Math.max(1, Number(cart[idx].qty) || 1) + 1;
+                } else {
+                    cart.push({
+                        id,
+                        cafeId: cafeId ?? null,
+                        cafeName: cafeName ?? '',
+                        name: itemName,
+                        price: Number(price) || 0,
+                        qty: 1,
+                        img: img || ''
+                    });
+                }
+                saveCart(cart);
+            };
+
             let menuHtml = '';
-            (menus[data.id] || ['Cà phê sữa đá 39k', 'Bạc xỉu 42k', 'Đen đá 35k']).forEach(m => {
-                let [name, price] = m.split(' ');
-                menuHtml += `<div class="menu-item"><span>${name}</span><span class="menu-price">${price}</span></div>`;
+            (menus[data.id] || ['Cà phê sữa đá 39k', 'Bạc xỉu 42k', 'Đen đá 35k']).forEach(line => {
+                const parsed = parseMenuLine(line);
+                menuHtml += `
+                    <div class="menu-item">
+                        <span class="menu-name">${escapeHtml(parsed.name)}</span>
+                        <div class="menu-right">
+                            <span class="menu-price">${escapeHtml(parsed.priceLabel)}</span>
+                            <button type="button" class="menu-add-btn" data-item-name="${escapeAttr(parsed.name)}" data-item-price="${Number(parsed.price) || 0}">
+                                Đặt
+                            </button>
+                        </div>
+                    </div>
+                `;
             });
-            document.getElementById('menuList').innerHTML = menuHtml;
+            const menuListEl = document.getElementById('menuList');
+            if (menuListEl) {
+                menuListEl.innerHTML = menuHtml;
+                menuListEl.addEventListener('click', (e) => {
+                    const btn = e.target.closest('.menu-add-btn');
+                    if (!btn) return;
+
+                    const itemName = (btn.getAttribute('data-item-name') || '').trim();
+                    const price = Number(btn.getAttribute('data-item-price')) || 0;
+                    if (!itemName) return;
+
+                    addToCart({
+                        cafeId: data.id,
+                        cafeName: data.ten,
+                        itemName,
+                        price,
+                        img: data.img
+                    });
+
+                    alert(`✅ Đã thêm "${itemName}" vào giỏ hàng.`);
+                });
+            }
         }
 
         document.getElementById('favBtn').onclick = function () {

@@ -72,8 +72,30 @@ body {
 .menu-item {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
 	padding: 12px 0;
 	border-bottom: 1px dashed #ddd
+}
+
+.menu-right {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.menu-add-btn {
+	background: #c9772e;
+	color: white;
+	border: none;
+	padding: 6px 16px;
+	border-radius: 999px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.menu-add-btn:hover {
+	filter: brightness(0.95);
 }
 
 .menu-price {

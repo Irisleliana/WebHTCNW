@@ -5,13 +5,7 @@
             <span>DrinkHub</span>
         </a>
 
-        <div class="location-picker">
-            <i class="fa-solid fa-location-dot"></i>
-            <div class="location-info">
-                <span class="location-label">Giao đến</span>
-                <span class="location-address">Quận 1, TP.HCM <i class="fa-solid fa-chevron-down"></i></span>
-            </div>
-        </div>
+      
 
         <div class="search-bar">
             <i class="fa-solid fa-search"></i>
@@ -32,15 +26,107 @@
 
             <a href="#" data-href="assets/page/cartPage/cartPage.html" class="action-btn cart-btn">
                 <i class="fa-solid fa-cart-shopping"></i>
-                <span class="badge">3</span>
+                <span class="badge" style="display:none">0</span>
             </a>
 
-            <a href="#" data-href="assets/page/userPage/userPage.html" class="user-account">
+            <button type="button" class="user-account" data-bs-toggle="modal" data-bs-target="#authModal" aria-label="Đăng nhập">
                 <div class="avatar">
                     <i class="fa-solid fa-user"></i>
                 </div>
                 <span class="user-name">Đăng nhập</span>
-            </a>
+            </button>
         </div>
     </div>
 </header>
+
+<!-- Auth Modal (Bootstrap) -->
+<div class="modal fade auth-modal" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <div class="w-100">
+                    <ul class="nav nav-tabs" id="authTab" role="tablist" aria-label="Đăng nhập/Đăng ký">
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100 active" id="login-tab" data-bs-toggle="tab"
+                                data-bs-target="#login-pane" type="button" role="tab" aria-controls="login-pane"
+                                aria-selected="true">ĐĂNG NHẬP</button>
+                        </li>
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100" id="register-tab" data-bs-toggle="tab"
+                                data-bs-target="#register-pane" type="button" role="tab"
+                                aria-controls="register-pane" aria-selected="false">ĐĂNG KÝ</button>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="btn-close ms-2" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body pt-3">
+                <div class="tab-content" id="authTabContent">
+                    <div class="tab-pane fade show active" id="login-pane" role="tabpanel"
+                        aria-labelledby="login-tab" tabindex="0">
+                        <p class="text-muted small mb-3">
+                            Vui lòng đăng nhập trước khi gọi món để tích lũy điểm, cơ hội nhận thêm nhiều ưu đãi từ chương
+                            trình thành viên.
+                        </p>
+                        <form id="loginForm">
+                            <div class="mb-3">
+                                <input id="loginEmail" name="email" type="email" class="form-control" placeholder="Email"
+                                    autocomplete="email" required>
+                            </div>
+                            <div class="mb-2">
+                                <input id="loginPassword" name="password" type="password" class="form-control" placeholder="Mật khẩu"
+                                    autocomplete="current-password" required>
+                            </div>
+                            <a href="#" class="small text-muted d-inline-block mb-3">Quên mật khẩu?</a>
+                            <button type="submit" class="btn btn-primary w-100">Đăng Nhập</button>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="register-pane" role="tabpanel" aria-labelledby="register-tab"
+                        tabindex="0">
+                        <p class="text-muted small mb-3">Tạo tài khoản để lưu địa chỉ và theo dõi đơn hàng.</p>
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <input id="registerFullName" name="fullName" type="text" class="form-control"
+                                    placeholder="Họ và tên" autocomplete="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <input id="registerPhone" name="phone" type="tel" class="form-control"
+                                    placeholder="Số điện thoại" inputmode="numeric" autocomplete="tel" required>
+                            </div>
+                            <div class="mb-3">
+                                <select id="registerGender" name="gender" class="form-select" required>
+                                    <option value="" selected>Chọn giới tính</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <input id="registerEmail" name="email" type="email" class="form-control"
+                                    placeholder="Email" autocomplete="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <input id="registerPassword" name="password" type="password" class="form-control"
+                                    placeholder="Mật khẩu" autocomplete="new-password" required>
+                            </div>
+                            <div class="mb-3">
+                                <input id="registerConfirmPassword" name="confirmPassword" type="password" class="form-control"
+                                    placeholder="Nhập lại mật khẩu" autocomplete="new-password" required>
+                            </div>
+                            <div class="mb-3">
+                                <input id="registerAddress" name="address" type="text" class="form-control"
+                                    placeholder="Địa chỉ" autocomplete="street-address" required>
+                            </div>
+                            <div class="mb-3">
+                                <input id="registerDob" name="dob" type="date" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Đăng Ký</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -39,6 +39,15 @@ body {
     margin-bottom: 20px;
 }
 
+.cart-empty {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    padding: 18px 20px;
+    color: var(--text-gray);
+    text-align: center;
+}
+
 .cart-items-container::-webkit-scrollbar {
     width: 6px;
 }
@@ -186,7 +195,14 @@ body {
     box-shadow: 0 5px 15px rgba(211, 84, 0, 0.3);
 }
 
-.modal {
+.dh-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.dh-modal {
     display: none;
     position: fixed;
     z-index: 3000;
@@ -199,7 +215,7 @@ body {
     justify-content: center;
 }
 
-.modal-content {
+.dh-modal-content {
     background: white;
     padding: 30px;
     border-radius: 20px;

@@ -1,4 +1,9 @@
-// Tính toán đường dẫn gốc dựa trên vị trí của main.js
+/*
+    main.js: tải header/footer + gắn các hành vi dùng chung (search, badge giỏ hàng, validate form...).
+    Mục tiêu: trang nào nhúng main.js đều chạy được dù đang ở thư mục con nào.
+*/
+
+// Tìm đường dẫn tới thư mục /assets dựa trên vị trí file main.js
 function getBasePath() {
     const scripts = document.getElementsByTagName('script');
     for (let script of scripts) {
@@ -23,7 +28,7 @@ function getRootPath() {
     return '.';
 }
 
-// Cập nhật các link trong header/footer sau khi load
+// Sau khi load component, đổi data-href -> href thật
 function updateNavLinks() {
     const rootPath = getRootPath();
     const navLinks = document.querySelectorAll('[data-href]');
@@ -78,6 +83,11 @@ function attachCafeCardNavigation() {
     }
 
     cards.forEach(card => {
+        // Card nào đã có onclick riêng (index/listPage) thì không ghi đè.
+        if (card.getAttribute('onclick')) {
+            return;
+        }
+
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
 
@@ -129,7 +139,216 @@ function initDetailPageData() {
     }
 }
 
-// Hàm load HTML từ file component
+function attachAuthModalValidation() {
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', event => {
+            event.preventDefault();
+
+            const email = (document.getElementById('loginEmail')?.value || '').trim();
+            const password = document.getElementById('loginPassword')?.value || '';
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+            const errors = [];
+            if (!emailRegex.test(email)) {
+                errors.push('Email không hợp lệ.');
+            }
+            if (!password) {
+                errors.push('Vui lòng nhập mật khẩu.');
+            }
+
+            if (errors.length) {
+                alert(errors.join('\n'));
+                return;
+            }
+
+            alert('Đăng nhập (demo) thành công.');
+        });
+    }
+
+    if (registerForm) {
+        registerForm.addEventListener('submit', event => {
+            event.preventDefault();
+
+            const fullName = (document.getElementById('registerFullName')?.value || '').trim();
+            const phone = (document.getElementById('registerPhone')?.value || '').trim();
+            const gender = (document.getElementById('registerGender')?.value || '').trim();
+            const email = (document.getElementById('registerEmail')?.value || '').trim();
+            const password = document.getElementById('registerPassword')?.value || '';
+            const confirmPassword = document.getElementById('registerConfirmPassword')?.value || '';
+            const address = (document.getElementById('registerAddress')?.value || '').trim();
+            const dob = (document.getElementById('registerDob')?.value || '').trim();
+
+            // Validate bằng regex (đăng ký)
+            const fullNameRegex = /^(?=.{4,30}$)(?:\p{Lu}\p{Ll}+)(?:\s+\p{Lu}\p{Ll}+)*$/u;
+            const phoneRegex = /^(?:08|09|03|07|05)\d{8}$/;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
+
+            const errors = [];
+
+            if (!fullNameRegex.test(fullName)) {
+                errors.push('Họ tên phải có từ 4 đến 30 ký tự, mỗi chữ cái đầu viết hoa.');
+            }
+            if (!phoneRegex.test(phone)) {
+                errors.push('Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng 08, 09, 03, 07 hoặc 05.');
+            }
+            if (!gender) {
+                errors.push('Vui lòng chọn giới tính.');
+            }
+            if (!emailRegex.test(email)) {
+                errors.push('Email không hợp lệ.');
+            }
+            if (!passwordRegex.test(password)) {
+                errors.push('Mật khẩu phải có ít nhất 6 ký tự, bao gồm 1 chữ hoa, 1 số và 1 ký tự đặc biệt.');
+            }
+            if (password !== confirmPassword) {
+                errors.push('Mật khẩu nhập lại không khớp.');
+            }
+            if (!address) {
+                errors.push('Vui lòng nhập địa chỉ.');
+            }
+            if (!dob) {
+                errors.push('Vui lòng chọn ngày sinh.');
+            } else {
+                const dobDate = new Date(dob + 'T00:00:00');
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                if (!(dobDate < today)) {
+                    errors.push('Ngày sinh phải trước ngày hôm nay.');
+                }
+            }
+
+            if (errors.length) {
+                alert(errors.join('\n'));
+                return;
+            }
+
+            alert('Đăng ký thành công.');
+        });
+    }
+}
+
+function debounce(callback, waitMs) {
+    let timeoutId;
+    return (...args) => {
+        if (timeoutId) {
+            clearTimeout(timeoutId);
+        }
+        timeoutId = setTimeout(() => callback(...args), waitMs);
+    };
+}
+
+function attachCafeSearch() {
+    const headerSearchInput = document.querySelector('.main-header .search-bar input');
+    if (!headerSearchInput) {
+        return;
+    }
+
+    const rootPath = getRootPath();
+    const listPageUrl = rootPath + '/assets/page/listPage/listPage.html';
+
+    const listSearchInput = document.getElementById('searchInput');
+    const listDistrictSelect = document.getElementById('locQuan');
+
+    const runListFilter = () => {
+        if (typeof window.locQuan === 'function') {
+            window.locQuan();
+        }
+    };
+
+    const applyKeywordToListPage = keyword => {
+        if (!listSearchInput) {
+            return;
+        }
+        listSearchInput.value = keyword;
+        runListFilter();
+    };
+
+    // Nếu đang ở listPage và có ?q=... thì tự đổ vào ô tìm kiếm và lọc luôn
+    if (listSearchInput) {
+        const params = new URLSearchParams(window.location.search);
+        const q = (params.get('q') || '').trim();
+        if (q) {
+            headerSearchInput.value = q;
+            applyKeywordToListPage(q);
+        }
+    }
+
+    // Nhấn Enter ở ô search header: đang ở listPage thì lọc, không thì chuyển trang sang listPage
+    headerSearchInput.addEventListener('keydown', event => {
+        if (event.key !== 'Enter') {
+            return;
+        }
+        event.preventDefault();
+
+        const keyword = headerSearchInput.value.trim();
+        if (listSearchInput) {
+            applyKeywordToListPage(keyword);
+            return;
+        }
+
+        const targetUrl = keyword ? `${listPageUrl}?q=${encodeURIComponent(keyword)}` : listPageUrl;
+        window.location.href = targetUrl;
+    });
+
+    // Ở listPage: gõ ở header sẽ lọc realtime
+    if (listSearchInput) {
+        headerSearchInput.addEventListener(
+            'input',
+            debounce(() => {
+                applyKeywordToListPage(headerSearchInput.value.trim());
+            }, 150)
+        );
+
+        // Gõ ở ô search của listPage cũng sync ngược lại lên header
+        listSearchInput.addEventListener(
+            'input',
+            debounce(() => {
+                headerSearchInput.value = listSearchInput.value;
+                runListFilter();
+            }, 150)
+        );
+
+        if (listDistrictSelect) {
+            listDistrictSelect.addEventListener('change', () => runListFilter());
+        }
+    }
+}
+
+// Giỏ hàng: lưu trong localStorage key "drinkhub_cart"
+function loadCart() {
+    try {
+        const cart = JSON.parse(localStorage.getItem('drinkhub_cart') || '[]');
+        return Array.isArray(cart) ? cart : [];
+    } catch {
+        return [];
+    }
+}
+
+function getCartCount() {
+    const cart = loadCart();
+    return cart.reduce((sum, item) => sum + (Number(item?.qty) || 0), 0);
+}
+
+function updateCartBadge() {
+    const badge = document.querySelector('.cart-btn .badge');
+    if (!badge) {
+        return;
+    }
+
+    const count = getCartCount();
+    badge.textContent = String(count);
+    badge.style.display = count > 0 ? 'inline-flex' : 'none';
+}
+
+// Public API nhỏ để trang khác gọi cập nhật badge
+window.DrinkHub = window.DrinkHub || {};
+window.DrinkHub.updateCartBadge = updateCartBadge;
+
+// Load HTML component vào placeholder
 async function loadComponent(id, file) {
     const element = document.getElementById(id);
     if (element) {
@@ -144,13 +363,16 @@ async function loadComponent(id, file) {
     }
 }
 
-// Chạy khi web load xong
+// Khởi tạo sau khi DOM sẵn sàng
 document.addEventListener("DOMContentLoaded", async () => {
     const basePath = getBasePath();
     await loadComponent("header-placeholder", basePath + "/component/header/header.html");
     await loadComponent("footer-placeholder", basePath + "/component/footer/footer.html");
     updateNavLinks();
     updateActiveHeaderLink();
+    updateCartBadge();
     attachCafeCardNavigation();
     initDetailPageData();
+    attachAuthModalValidation();
+    attachCafeSearch();
 });

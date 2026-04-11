@@ -26,14 +26,21 @@ body {
 .hero-section {
     position: relative;
     min-height: 500px;
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
-
+    background-image: url('./img/componentIMG/Container12.png');
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     display: flex;
     align-items: center;
     padding: 60px 80px;
     overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 1;
 }
 
 .hero-content {
@@ -96,9 +103,9 @@ body {
 .coffee-cup-wrapper {
     width: 320px;
     height: 320px;
-    border-radius: 50%;
+    border-radius: 18px;
     overflow: hidden;
-    border: 5px solid rgba(255, 255, 255, 0.3);
+    border: none;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
@@ -226,6 +233,17 @@ body {
     color: var(--text-dark);
 }
 
+.cafe-location {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cafe-location i {
+    color: var(--primary-color);
+}
 
 .floating-search-btn {
     position: fixed;
