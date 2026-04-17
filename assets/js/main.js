@@ -28,6 +28,263 @@ function getRootPath() {
     return '.';
 }
 
+function loadScriptOnce(src) {
+    return new Promise((resolve, reject) => {
+        const existing = Array.from(document.querySelectorAll('script[data-drinkhub-src]'))
+            .find(script => script.dataset.drinkhubSrc === src);
+        if (existing) {
+            if (existing.dataset.loaded === 'true') {
+                resolve();
+                return;
+            }
+
+            existing.addEventListener('load', () => resolve(), { once: true });
+            existing.addEventListener('error', () => reject(new Error('Không tải được script: ' + src)), { once: true });
+            return;
+        }
+
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.defer = true;
+        script.dataset.drinkhubSrc = src;
+        script.addEventListener('load', () => {
+            script.dataset.loaded = 'true';
+            resolve();
+        }, { once: true });
+        script.addEventListener('error', () => reject(new Error('Không tải được script: ' + src)), { once: true });
+        document.head.appendChild(script);
+    });
+}
+
+async function loadOptionalScript(src) {
+    try {
+        // Kiểm tra tồn tại trước khi load để tránh báo lỗi console 404.
+        const res = await fetch(src, { method: 'GET' });
+        if (!res.ok) {
+            return false;
+        }
+        await loadScriptOnce(src);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+function getFirebaseConfig() {
+    const cfg = window.DRINKHUB_FIREBASE_CONFIG;
+    if (!cfg || typeof cfg !== 'object') {
+        return null;
+    }
+
+    const required = ['apiKey', 'authDomain', 'projectId', 'appId'];
+    const missing = required.filter(key => !String(cfg[key] || '').trim());
+    if (missing.length) {
+        return null;
+    }
+
+    return cfg;
+}
+
+async function ensureFirebaseLoaded() {
+    // Firebase Auth không chạy ổn định trên file:// (đặc biệt popup/redirect).
+    // Dự án hiện có fetch component => nên chạy bằng Live Server/localhost.
+    const basePath = getBasePath();
+    await loadOptionalScript(basePath + '/js/firebase-config.js');
+
+    const cfg = getFirebaseConfig();
+    if (!cfg) {
+        return { enabled: false, reason: 'missing-config' };
+    }
+
+    // Load Firebase compat SDK để dùng được với main.js dạng script thường.
+    const version = '10.12.4';
+    const appSrc = `https://www.gstatic.com/firebasejs/${version}/firebase-app-compat.js`;
+    const authSrc = `https://www.gstatic.com/firebasejs/${version}/firebase-auth-compat.js`;
+    const firestoreSrc = `https://www.gstatic.com/firebasejs/${version}/firebase-firestore-compat.js`;
+
+    await loadScriptOnce(appSrc);
+    await loadScriptOnce(authSrc);
+    await loadScriptOnce(firestoreSrc);
+
+    if (!window.firebase) {
+        return { enabled: false, reason: 'sdk-not-loaded' };
+    }
+
+    if (!firebase.apps || !firebase.apps.length) {
+        firebase.initializeApp(cfg);
+    }
+
+    return { enabled: true };
+}
+
+function mapFirebaseAuthError(error) {
+    const code = String(error?.code || '');
+    switch (code) {
+        case 'auth/configuration-not-found':
+            return 'Firebase Authentication chưa được cấu hình đúng. Hãy vào Firebase Console → Authentication → Get started và bật phương thức Email/Password.';
+        case 'auth/invalid-credential':
+        case 'auth/user-not-found':
+        case 'auth/wrong-password':
+            return 'Email hoặc mật khẩu không đúng.';
+        case 'auth/operation-not-allowed':
+            return 'Phương thức đăng nhập này chưa được bật. Hãy bật Email/Password trong Firebase Console → Authentication → Sign-in method.';
+        case 'auth/invalid-email':
+            return 'Email không hợp lệ.';
+        case 'auth/email-already-in-use':
+            return 'Email này đã được sử dụng. Vui lòng đăng nhập.';
+        case 'auth/weak-password':
+            return 'Mật khẩu quá yếu.';
+        case 'auth/network-request-failed':
+            return 'Lỗi mạng. Vui lòng thử lại.';
+        default:
+            return error?.message || 'Có lỗi xảy ra. Vui lòng thử lại.';
+    }
+}
+
+function getUserDisplayName(user) {
+    return (user?.displayName || '').trim() || (user?.email || '').trim() || 'Tài khoản';
+}
+
+function setHeaderAuthUI(user) {
+    const accountButton = document.querySelector('.main-header .user-account');
+    const nameSpan = document.querySelector('.main-header .user-account .user-name');
+    if (!accountButton || !nameSpan) {
+        return;
+    }
+
+    const rootPath = getRootPath();
+    const userPageUrl = rootPath + '/assets/page/userPage/userPage.html';
+
+    // Xoá handler cũ (nếu có)
+    if (accountButton._drinkhubClickHandler) {
+        accountButton.removeEventListener('click', accountButton._drinkhubClickHandler);
+        accountButton._drinkhubClickHandler = null;
+    }
+
+    if (!user) {
+        nameSpan.textContent = 'Đăng nhập';
+        accountButton.setAttribute('data-bs-toggle', 'modal');
+        accountButton.setAttribute('data-bs-target', '#authModal');
+        accountButton.setAttribute('aria-label', 'Đăng nhập');
+        return;
+    }
+
+    nameSpan.textContent = getUserDisplayName(user);
+    accountButton.removeAttribute('data-bs-toggle');
+    accountButton.removeAttribute('data-bs-target');
+    accountButton.setAttribute('aria-label', 'Tài khoản');
+
+    const handler = event => {
+        // Tránh trường hợp click vào nút vẫn mở modal nếu bootstrap bắt sự kiện từ trước.
+        event.preventDefault();
+        window.location.href = userPageUrl;
+    };
+    accountButton._drinkhubClickHandler = handler;
+    accountButton.addEventListener('click', handler);
+}
+
+async function populateUserPage(user) {
+    // Chỉ chạy trên userPage
+    const currentPath = window.location.pathname.replace(/\\/g, '/');
+    if (!currentPath.endsWith('/assets/page/userPage/userPage.html')) {
+        return;
+    }
+
+    const nameEl = document.getElementById('userPageName');
+    const greetingEl = document.getElementById('userPageGreetingName');
+    const fullNameInput = document.getElementById('profileFullNameInput');
+    const phoneInput = document.getElementById('profilePhoneInput');
+
+    const displayName = getUserDisplayName(user);
+    if (nameEl) {
+        nameEl.textContent = displayName;
+    }
+    if (greetingEl) {
+        greetingEl.textContent = displayName;
+    }
+    if (fullNameInput && !fullNameInput.value) {
+        fullNameInput.value = user.displayName || '';
+    }
+
+    // Firestore profile (nếu có)
+    try {
+        const db = firebase.firestore();
+        const snap = await db.collection('users').doc(user.uid).get();
+        const data = snap.exists ? snap.data() : null;
+        if (data) {
+            if (fullNameInput) {
+                fullNameInput.value = data.fullName || fullNameInput.value;
+            }
+            if (phoneInput) {
+                phoneInput.value = data.phone || phoneInput.value;
+            }
+        }
+    } catch (err) {
+        console.warn('Không đọc được hồ sơ từ Firestore:', err);
+    }
+
+    // Logout
+    const logoutLink = document.getElementById('userLogoutLink');
+    if (logoutLink && !logoutLink.dataset.bound) {
+        logoutLink.dataset.bound = 'true';
+        logoutLink.addEventListener('click', async event => {
+            event.preventDefault();
+            try {
+                await firebase.auth().signOut();
+                window.location.href = getRootPath() + '/index.html';
+            } catch (err) {
+                alert(mapFirebaseAuthError(err));
+            }
+        });
+    }
+
+    // Update basic profile
+    const updateBtn = document.getElementById('profileUpdateBtn');
+    if (updateBtn && !updateBtn.dataset.bound) {
+        updateBtn.dataset.bound = 'true';
+        updateBtn.addEventListener('click', async () => {
+            const fullName = (fullNameInput?.value || '').trim();
+            const phone = (phoneInput?.value || '').trim();
+
+            const errors = [];
+            if (!fullName) {
+                errors.push('Vui lòng nhập họ và tên.');
+            }
+            if (phone && !/^(?:08|09|03|07|05)\d{8}$/.test(phone)) {
+                errors.push('Số điện thoại không hợp lệ.');
+            }
+            if (errors.length) {
+                alert(errors.join('\n'));
+                return;
+            }
+
+            try {
+                await user.updateProfile({ displayName: fullName });
+                await firebase.firestore().collection('users').doc(user.uid).set(
+                    {
+                        fullName,
+                        phone,
+                        email: user.email || '',
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    },
+                    { merge: true }
+                );
+                alert('Cập nhật thông tin thành công.');
+                setHeaderAuthUI(firebase.auth().currentUser);
+                if (nameEl) {
+                    nameEl.textContent = fullName;
+                }
+                if (greetingEl) {
+                    greetingEl.textContent = fullName;
+                }
+            } catch (err) {
+                alert(mapFirebaseAuthError(err));
+            }
+        });
+    }
+}
+
 // Sau khi load component, đổi data-href -> href thật
 function updateNavLinks() {
     const rootPath = getRootPath();
@@ -139,16 +396,83 @@ function initDetailPageData() {
     }
 }
 
-function attachAuthModalValidation() {
+async function attachAuthModalValidation() {
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
+    const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+
+    const firebaseState = await ensureFirebaseLoaded();
+    const firebaseEnabled = firebaseState.enabled === true;
+
+    // Nếu chưa bật Firebase, vẫn set UI về trạng thái chưa đăng nhập.
+    if (!firebaseEnabled) {
+        setHeaderAuthUI(null);
+        if (firebaseState.reason === 'missing-config') {
+            console.warn(
+                'DrinkHub: Chưa cấu hình Firebase. Hãy điền config ở assets/js/firebase-config.js và chạy bằng localhost (Live Server).'
+            );
+        }
+    }
+
+    if (firebaseEnabled) {
+        // Đồng bộ UI header theo trạng thái đăng nhập
+        firebase.auth().onAuthStateChanged(async user => {
+            setHeaderAuthUI(user);
+
+            const currentPath = window.location.pathname.replace(/\\/g, '/');
+            if (currentPath.endsWith('/assets/page/userPage/userPage.html')) {
+                if (!user) {
+                    // Mở modal đăng nhập khi truy cập userPage mà chưa đăng nhập.
+                    const modalEl = document.getElementById('authModal');
+                    if (modalEl && window.bootstrap?.Modal) {
+                        const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                        modal.show();
+                    } else {
+                        alert('Vui lòng đăng nhập để xem trang tài khoản.');
+                    }
+                } else {
+                    await populateUserPage(user);
+                }
+            }
+        });
+    }
+
+    if (forgotPasswordLink && !forgotPasswordLink.dataset.bound) {
+        forgotPasswordLink.dataset.bound = 'true';
+        forgotPasswordLink.addEventListener('click', async event => {
+            event.preventDefault();
+
+            if (!firebaseEnabled) {
+                alert('Chưa cấu hình Firebase để dùng chức năng quên mật khẩu.');
+                return;
+            }
+
+            const emailFromInput = (document.getElementById('loginEmail')?.value || '').trim();
+            const email = (prompt('Nhập email để đặt lại mật khẩu:', emailFromInput) || '').trim();
+            if (!email) {
+                return;
+            }
+
+            try {
+                await firebase.auth().sendPasswordResetEmail(email);
+                alert('Đã gửi email đặt lại mật khẩu. Vui lòng kiểm tra hộp thư.');
+            } catch (err) {
+                alert(mapFirebaseAuthError(err));
+            }
+        });
+    }
 
     if (loginForm) {
-        loginForm.addEventListener('submit', event => {
+        loginForm.addEventListener('submit', async event => {
             event.preventDefault();
 
             const email = (document.getElementById('loginEmail')?.value || '').trim();
             const password = document.getElementById('loginPassword')?.value || '';
+
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+            if (submitBtn && submitBtn.disabled) {
+                return;
+            }
 
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
             const errors = [];
@@ -164,12 +488,34 @@ function attachAuthModalValidation() {
                 return;
             }
 
-            alert('Đăng nhập (demo) thành công.');
+            if (!firebaseEnabled) {
+                if (firebaseState.reason === 'missing-config') {
+                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở assets/js/firebase-config.js (xem FIREBASE_SETUP.md).');
+                    return;
+                }
+
+                alert('Đăng nhập (demo) thành công.');
+                return;
+            }
+
+            try {
+                if (submitBtn) submitBtn.disabled = true;
+                await firebase.auth().signInWithEmailAndPassword(email, password);
+                const modalEl = document.getElementById('authModal');
+                if (modalEl && window.bootstrap?.Modal) {
+                    bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+                }
+                loginForm.reset();
+            } catch (err) {
+                alert(mapFirebaseAuthError(err));
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
         });
     }
 
     if (registerForm) {
-        registerForm.addEventListener('submit', event => {
+        registerForm.addEventListener('submit', async event => {
             event.preventDefault();
 
             const fullName = (document.getElementById('registerFullName')?.value || '').trim();
@@ -180,6 +526,11 @@ function attachAuthModalValidation() {
             const confirmPassword = document.getElementById('registerConfirmPassword')?.value || '';
             const address = (document.getElementById('registerAddress')?.value || '').trim();
             const dob = (document.getElementById('registerDob')?.value || '').trim();
+
+            const submitBtn = registerForm.querySelector('button[type="submit"]');
+            if (submitBtn && submitBtn.disabled) {
+                return;
+            }
 
             // Validate bằng regex (đăng ký)
             const fullNameRegex = /^(?=.{4,30}$)(?:\p{Lu}\p{Ll}+)(?:\s+\p{Lu}\p{Ll}+)*$/u;
@@ -226,7 +577,47 @@ function attachAuthModalValidation() {
                 return;
             }
 
-            alert('Đăng ký thành công.');
+            if (!firebaseEnabled) {
+                if (firebaseState.reason === 'missing-config') {
+                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở assets/js/firebase-config.js (xem FIREBASE_SETUP.md).');
+                    return;
+                }
+
+                alert('Đăng ký thành công.');
+                return;
+            }
+
+            try {
+                if (submitBtn) submitBtn.disabled = true;
+                const cred = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = cred.user;
+                if (user) {
+                    await user.updateProfile({ displayName: fullName });
+                    await firebase.firestore().collection('users').doc(user.uid).set(
+                        {
+                            fullName,
+                            phone,
+                            gender,
+                            email,
+                            address,
+                            dob,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        },
+                        { merge: true }
+                    );
+                }
+
+                const modalEl = document.getElementById('authModal');
+                if (modalEl && window.bootstrap?.Modal) {
+                    bootstrap.Modal.getOrCreateInstance(modalEl).hide();
+                }
+                registerForm.reset();
+                alert('Đăng ký thành công.');
+            } catch (err) {
+                alert(mapFirebaseAuthError(err));
+            } finally {
+                if (submitBtn) submitBtn.disabled = false;
+            }
         });
     }
 }
@@ -373,6 +764,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateCartBadge();
     attachCafeCardNavigation();
     initDetailPageData();
-    attachAuthModalValidation();
+    await attachAuthModalValidation();
     attachCafeSearch();
 });
