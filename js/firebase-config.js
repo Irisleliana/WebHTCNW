@@ -1,9 +1,3 @@
-/*
-  DrinkHub Firebase config
-  - File này được `js/main.js` load tự động.
-  - Dự án hiện chạy kiểu HTML + script thường (không bundler), vì vậy KHÔNG dùng `import` ở đây.
-  - Đây là "public config" (không phải secret).
-*/
 
 window.DRINKHUB_FIREBASE_CONFIG = {
   apiKey: "AIzaSyAIdd0mryOIkWYTXT4oek9L0CfugWnXG_k",

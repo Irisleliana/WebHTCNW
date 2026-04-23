@@ -1,7 +1,4 @@
-/*
-    main.js: tải header/footer + gắn các hành vi dùng chung (search, badge giỏ hàng, validate form...).
-    Mục tiêu: trang nào nhúng main.js đều chạy được dù đang ở thư mục con nào.
-*/
+
 
 // Tìm đường dẫn tới thư mục gốc project dựa trên vị trí file /js/main.js
 function getBasePath() {
@@ -23,6 +20,7 @@ function getRootPath() {
     return getBasePath();
 }
 
+// Tải một tập lệnh chỉ một lần
 function loadScriptOnce(src) {
     return new Promise((resolve, reject) => {
         const existing = Array.from(document.querySelectorAll('script[data-drinkhub-src]'))
@@ -34,7 +32,7 @@ function loadScriptOnce(src) {
             }
 
             existing.addEventListener('load', () => resolve(), { once: true });
-            existing.addEventListener('error', () => reject(new Error('Không tải được script: ' + src)), { once: true });
+            existing.addEventListener('error', () => reject(new Error('Failed to load script: ' + src)), { once: true });
             return;
         }
 
@@ -47,14 +45,14 @@ function loadScriptOnce(src) {
             script.dataset.loaded = 'true';
             resolve();
         }, { once: true });
-        script.addEventListener('error', () => reject(new Error('Không tải được script: ' + src)), { once: true });
+        script.addEventListener('error', () => reject(new Error('Failed to load script: ' + src)), { once: true });
         document.head.appendChild(script);
     });
 }
 
+// Tải một tập lệnh nếu nó tồn tại
 async function loadOptionalScript(src) {
     try {
-        // Kiểm tra tồn tại trước khi load để tránh báo lỗi console 404.
         const res = await fetch(src, { method: 'GET' });
         if (!res.ok) {
             return false;
@@ -66,6 +64,7 @@ async function loadOptionalScript(src) {
     }
 }
 
+// Phần Firebase 
 function getFirebaseConfig() {
     const cfg = window.DRINKHUB_FIREBASE_CONFIG;
     if (!cfg || typeof cfg !== 'object') {
@@ -82,8 +81,6 @@ function getFirebaseConfig() {
 }
 
 async function ensureFirebaseLoaded() {
-    // Firebase Auth không chạy ổn định trên file:// (đặc biệt popup/redirect).
-    // Dự án hiện có fetch component => nên chạy bằng Live Server/localhost.
     const basePath = getBasePath();
     await loadOptionalScript(basePath + '/js/firebase-config.js');
 
@@ -92,7 +89,6 @@ async function ensureFirebaseLoaded() {
         return { enabled: false, reason: 'missing-config' };
     }
 
-    // Load Firebase compat SDK để dùng được với main.js dạng script thường.
     const version = '10.12.4';
     const appSrc = `https://www.gstatic.com/firebasejs/${version}/firebase-app-compat.js`;
     const authSrc = `https://www.gstatic.com/firebasejs/${version}/firebase-auth-compat.js`;
@@ -113,33 +109,36 @@ async function ensureFirebaseLoaded() {
     return { enabled: true };
 }
 
+// Ánh xạ lỗi xác thực Firebase thành thông báo thân thiện với người dùng
 function mapFirebaseAuthError(error) {
     const code = String(error?.code || '');
     switch (code) {
         case 'auth/configuration-not-found':
-            return 'Firebase Authentication chưa được cấu hình đúng. Hãy vào Firebase Console → Authentication → Get started và bật phương thức Email/Password.';
+            return 'Firebase Authentication is not configured. Enable Email/Password in Firebase Console → Authentication → Sign-in method.';
         case 'auth/invalid-credential':
         case 'auth/user-not-found':
         case 'auth/wrong-password':
-            return 'Email hoặc mật khẩu không đúng.';
+            return 'Invalid email or password.';
         case 'auth/operation-not-allowed':
-            return 'Phương thức đăng nhập này chưa được bật. Hãy bật Email/Password trong Firebase Console → Authentication → Sign-in method.';
+            return 'This sign-in method is not enabled. Enable Email/Password in Firebase Console → Authentication → Sign-in method.';
         case 'auth/invalid-email':
-            return 'Email không hợp lệ.';
+            return 'Invalid email address.';
         case 'auth/email-already-in-use':
-            return 'Email này đã được sử dụng. Vui lòng đăng nhập.';
+            return 'This email is already in use. Please log in.';
         case 'auth/weak-password':
-            return 'Mật khẩu quá yếu.';
+            return 'Weak password.';
         case 'auth/network-request-failed':
-            return 'Lỗi mạng. Vui lòng thử lại.';
+            return 'Network error. Please try again.';
         default:
-            return error?.message || 'Có lỗi xảy ra. Vui lòng thử lại.';
+            return error?.message || 'An error occurred. Please try again.';
     }
 }
 
+//Phần Người dùng 
 function getUserDisplayName(user) {
-    return (user?.displayName || '').trim() || (user?.email || '').trim() || 'Tài khoản';
+    return (user?.displayName || '').trim() || (user?.email || '').trim() || 'Account';
 }
+
 
 function setHeaderAuthUI(user) {
     const accountButton = document.querySelector('.main-header .user-account');
@@ -151,27 +150,25 @@ function setHeaderAuthUI(user) {
     const rootPath = getRootPath();
     const userPageUrl = rootPath + '/html/userPage.html';
 
-    // Xoá handler cũ (nếu có)
     if (accountButton._drinkhubClickHandler) {
         accountButton.removeEventListener('click', accountButton._drinkhubClickHandler);
         accountButton._drinkhubClickHandler = null;
     }
 
     if (!user) {
-        nameSpan.textContent = 'Đăng nhập';
+        nameSpan.textContent = 'Log in';
         accountButton.setAttribute('data-bs-toggle', 'modal');
         accountButton.setAttribute('data-bs-target', '#authModal');
-        accountButton.setAttribute('aria-label', 'Đăng nhập');
+        accountButton.setAttribute('aria-label', 'Log in');
         return;
     }
 
     nameSpan.textContent = getUserDisplayName(user);
     accountButton.removeAttribute('data-bs-toggle');
     accountButton.removeAttribute('data-bs-target');
-    accountButton.setAttribute('aria-label', 'Tài khoản');
+    accountButton.setAttribute('aria-label', 'Account');
 
     const handler = event => {
-        // Tránh trường hợp click vào nút vẫn mở modal nếu bootstrap bắt sự kiện từ trước.
         event.preventDefault();
         window.location.href = userPageUrl;
     };
@@ -179,8 +176,8 @@ function setHeaderAuthUI(user) {
     accountButton.addEventListener('click', handler);
 }
 
+// Điền thông tin người dùng trên trang người dùng
 async function populateUserPage(user) {
-    // Chỉ chạy trên userPage
     const currentPath = window.location.pathname.replace(/\\/g, '/');
     if (!currentPath.endsWith('/html/userPage.html')) {
         return;
@@ -202,7 +199,7 @@ async function populateUserPage(user) {
         fullNameInput.value = user.displayName || '';
     }
 
-    // Firestore profile (nếu có)
+    // Firestore profile (if available)
     try {
         const db = firebase.firestore();
         const snap = await db.collection('users').doc(user.uid).get();
@@ -216,7 +213,7 @@ async function populateUserPage(user) {
             }
         }
     } catch (err) {
-        console.warn('Không đọc được hồ sơ từ Firestore:', err);
+        console.warn('Failed to read user profile from Firestore:', err);
     }
 
     // Logout
@@ -244,10 +241,10 @@ async function populateUserPage(user) {
 
             const errors = [];
             if (!fullName) {
-                errors.push('Vui lòng nhập họ và tên.');
+                errors.push('Please enter your full name.');
             }
             if (phone && !/^(?:08|09|03|07|05)\d{8}$/.test(phone)) {
-                errors.push('Số điện thoại không hợp lệ.');
+                errors.push('Phone number is not valid.');
             }
             if (errors.length) {
                 alert(errors.join('\n'));
@@ -265,7 +262,7 @@ async function populateUserPage(user) {
                     },
                     { merge: true }
                 );
-                alert('Cập nhật thông tin thành công.');
+                alert('Profile updated successfully.');
                 setHeaderAuthUI(firebase.auth().currentUser);
                 if (nameEl) {
                     nameEl.textContent = fullName;
@@ -280,7 +277,7 @@ async function populateUserPage(user) {
     }
 }
 
-// Sau khi load component, đổi data-href -> href thật
+
 function updateNavLinks() {
     const rootPath = getRootPath();
     const navLinks = document.querySelectorAll('[data-href]');
@@ -291,6 +288,7 @@ function updateNavLinks() {
         }
     });
 }
+
 
 function updateActiveHeaderLink() {
     const currentPath = window.location.pathname.replace(/\\/g, '/');
@@ -305,6 +303,7 @@ function updateActiveHeaderLink() {
     });
 }
 
+// Get detail page URL
 function getDetailPageUrl(card) {
     const rootPath = getRootPath();
     const nameElement = card.querySelector('.cafe-name');
@@ -316,7 +315,7 @@ function getDetailPageUrl(card) {
     const ratingText = ratingElement ? ratingElement.textContent.trim() : '4.5';
     const rating = ratingText.replace(/[^0-9.]/g, '') || '4.5';
     const reviews = reviewElement ? reviewElement.textContent.replace(/\D/g, '') : '0';
-    const delivery = deliveryElement ? deliveryElement.textContent.trim() : 'Giao nhanh';
+    const delivery = deliveryElement ? deliveryElement.textContent.trim() : 'Fast delivery';
 
     const params = new URLSearchParams({
         name,
@@ -335,7 +334,7 @@ function attachCafeCardNavigation() {
     }
 
     cards.forEach(card => {
-        // Card nào đã có onclick riêng (index/listPage) thì không ghi đè.
+      
         if (card.getAttribute('onclick')) {
             return;
         }
@@ -356,6 +355,7 @@ function attachCafeCardNavigation() {
     });
 }
 
+
 function initDetailPageData() {
     const detailSection = document.getElementById('detail-page-content');
     if (!detailSection) {
@@ -366,7 +366,7 @@ function initDetailPageData() {
     const name = params.get('name') || 'DrinkHub Cafe';
     const rating = params.get('rating') || '4.5';
     const reviews = params.get('reviews') || '0';
-    const delivery = params.get('delivery') || 'Giao nhanh';
+    const delivery = params.get('delivery') || 'Fast delivery';
 
     const nameElement = document.getElementById('detail-cafe-name');
     const ratingElement = document.getElementById('detail-cafe-rating');
@@ -387,9 +387,10 @@ function initDetailPageData() {
         deliveryElement.textContent = delivery;
     }
     if (titleElement) {
-        titleElement.textContent = 'Chi tiet quan - ' + name;
+        titleElement.textContent = 'Detail - ' + name;
     }
 }
+
 
 async function attachAuthModalValidation() {
     const loginForm = document.getElementById('loginForm');
@@ -399,31 +400,29 @@ async function attachAuthModalValidation() {
     const firebaseState = await ensureFirebaseLoaded();
     const firebaseEnabled = firebaseState.enabled === true;
 
-    // Nếu chưa bật Firebase, vẫn set UI về trạng thái chưa đăng nhập.
+  
     if (!firebaseEnabled) {
         setHeaderAuthUI(null);
         if (firebaseState.reason === 'missing-config') {
             console.warn(
-                'DrinkHub: Chưa cấu hình Firebase. Hãy điền config ở js/firebase-config.js và chạy bằng localhost (Live Server).'
+                'DrinkHub: Not configured Firebase. Please fill config in js/firebase-config.js and run with localhost (Live Server).'
             );
         }
     }
 
     if (firebaseEnabled) {
-        // Đồng bộ UI header theo trạng thái đăng nhập
         firebase.auth().onAuthStateChanged(async user => {
             setHeaderAuthUI(user);
 
             const currentPath = window.location.pathname.replace(/\\/g, '/');
             if (currentPath.endsWith('/html/userPage.html')) {
                 if (!user) {
-                    // Mở modal đăng nhập khi truy cập userPage mà chưa đăng nhập.
                     const modalEl = document.getElementById('authModal');
                     if (modalEl && window.bootstrap?.Modal) {
                         const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
                         modal.show();
                     } else {
-                        alert('Vui lòng đăng nhập để xem trang tài khoản.');
+                        alert('Please log in to view the user page.');
                     }
                 } else {
                     await populateUserPage(user);
@@ -438,19 +437,19 @@ async function attachAuthModalValidation() {
             event.preventDefault();
 
             if (!firebaseEnabled) {
-                alert('Chưa cấu hình Firebase để dùng chức năng quên mật khẩu.');
+                alert('Not configured Firebase to use forgot password.');
                 return;
             }
 
             const emailFromInput = (document.getElementById('loginEmail')?.value || '').trim();
-            const email = (prompt('Nhập email để đặt lại mật khẩu:', emailFromInput) || '').trim();
+            const email = (prompt('Enter email to reset password:', emailFromInput) || '').trim();
             if (!email) {
                 return;
             }
 
             try {
                 await firebase.auth().sendPasswordResetEmail(email);
-                alert('Đã gửi email đặt lại mật khẩu. Vui lòng kiểm tra hộp thư.');
+                alert('Email sent to reset password. Please check your inbox.');
             } catch (err) {
                 alert(mapFirebaseAuthError(err));
             }
@@ -463,7 +462,6 @@ async function attachAuthModalValidation() {
 
             const email = (document.getElementById('loginEmail')?.value || '').trim();
             const password = document.getElementById('loginPassword')?.value || '';
-
             const submitBtn = loginForm.querySelector('button[type="submit"]');
             if (submitBtn && submitBtn.disabled) {
                 return;
@@ -472,10 +470,10 @@ async function attachAuthModalValidation() {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
             const errors = [];
             if (!emailRegex.test(email)) {
-                errors.push('Email không hợp lệ.');
+                errors.push('Invalid email.');
             }
             if (!password) {
-                errors.push('Vui lòng nhập mật khẩu.');
+                errors.push('Please enter a password.');
             }
 
             if (errors.length) {
@@ -485,11 +483,11 @@ async function attachAuthModalValidation() {
 
             if (!firebaseEnabled) {
                 if (firebaseState.reason === 'missing-config') {
-                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở js/firebase-config.js (xem FIREBASE_SETUP.md).');
+                    alert('You haven\'t configured Firebase. Please fill config in js/firebase-config.js (see FIREBASE_SETUP.md).');
                     return;
                 }
 
-                alert('Đăng nhập (demo) thành công.');
+                alert('Login (demo) successful.');
                 return;
             }
 
@@ -527,7 +525,7 @@ async function attachAuthModalValidation() {
                 return;
             }
 
-            // Validate bằng regex (đăng ký)
+            // Validate 
             const fullNameRegex = /^(?=.{4,30}$)(?:\p{Lu}\p{Ll}+)(?:\s+\p{Lu}\p{Ll}+)*$/u;
             const phoneRegex = /^(?:08|09|03|07|05)\d{8}$/;
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -536,34 +534,34 @@ async function attachAuthModalValidation() {
             const errors = [];
 
             if (!fullNameRegex.test(fullName)) {
-                errors.push('Họ tên phải có từ 4 đến 30 ký tự, mỗi chữ cái đầu viết hoa.');
+                errors.push('Full name must be 4-30 characters, each word capitalized.');
             }
             if (!phoneRegex.test(phone)) {
-                errors.push('Số điện thoại phải có đúng 10 chữ số và bắt đầu bằng 08, 09, 03, 07 hoặc 05.');
+                errors.push('Phone must be exactly 10 digits and start with 08, 09, 03, 07 or 05.');
             }
             if (!gender) {
-                errors.push('Vui lòng chọn giới tính.');
+                errors.push('Please select gender.');
             }
             if (!emailRegex.test(email)) {
-                errors.push('Email không hợp lệ.');
+                errors.push('Invalid email.');
             }
             if (!passwordRegex.test(password)) {
-                errors.push('Mật khẩu phải có ít nhất 6 ký tự, bao gồm 1 chữ hoa, 1 số và 1 ký tự đặc biệt.');
+                errors.push('Password must be at least 6 characters, including 1 uppercase, 1 number, and 1 special character.');
             }
             if (password !== confirmPassword) {
-                errors.push('Mật khẩu nhập lại không khớp.');
+                errors.push('Passwords do not match.');
             }
             if (!address) {
-                errors.push('Vui lòng nhập địa chỉ.');
+                errors.push('Please enter an address.');
             }
             if (!dob) {
-                errors.push('Vui lòng chọn ngày sinh.');
+                errors.push('Please select a date of birth.');
             } else {
                 const dobDate = new Date(dob + 'T00:00:00');
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 if (!(dobDate < today)) {
-                    errors.push('Ngày sinh phải trước ngày hôm nay.');
+                    errors.push('Date of birth must be before today.');
                 }
             }
 
@@ -574,11 +572,11 @@ async function attachAuthModalValidation() {
 
             if (!firebaseEnabled) {
                 if (firebaseState.reason === 'missing-config') {
-                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở js/firebase-config.js (xem FIREBASE_SETUP.md).');
+                    alert('You haven\'t configured Firebase. Please fill config in js/firebase-config.js (see FIREBASE_SETUP.md).');
                     return;
                 }
 
-                alert('Đăng ký thành công.');
+                alert('Registration successful.');
                 return;
             }
 
@@ -607,7 +605,7 @@ async function attachAuthModalValidation() {
                     bootstrap.Modal.getOrCreateInstance(modalEl).hide();
                 }
                 registerForm.reset();
-                alert('Đăng ký thành công.');
+                alert('Registration successful.');
             } catch (err) {
                 alert(mapFirebaseAuthError(err));
             } finally {
@@ -653,7 +651,6 @@ function attachCafeSearch() {
         runListFilter();
     };
 
-    // Nếu đang ở listPage và có ?q=... thì tự đổ vào ô tìm kiếm và lọc luôn
     if (listSearchInput) {
         const params = new URLSearchParams(window.location.search);
         const q = (params.get('q') || '').trim();
@@ -663,7 +660,6 @@ function attachCafeSearch() {
         }
     }
 
-    // Nhấn Enter ở ô search header: đang ở listPage thì lọc, không thì chuyển trang sang listPage
     headerSearchInput.addEventListener('keydown', event => {
         if (event.key !== 'Enter') {
             return;
@@ -680,7 +676,6 @@ function attachCafeSearch() {
         window.location.href = targetUrl;
     });
 
-    // Ở listPage: gõ ở header sẽ lọc realtime
     if (listSearchInput) {
         headerSearchInput.addEventListener(
             'input',
@@ -689,7 +684,6 @@ function attachCafeSearch() {
             }, 150)
         );
 
-        // Gõ ở ô search của listPage cũng sync ngược lại lên header
         listSearchInput.addEventListener(
             'input',
             debounce(() => {
@@ -704,7 +698,6 @@ function attachCafeSearch() {
     }
 }
 
-// Sau khi load component, đổi data-src -> src thật (theo rootPath)
 function updateMediaLinks() {
     const rootPath = getRootPath();
     const mediaEls = document.querySelectorAll('[data-src]');
@@ -717,8 +710,7 @@ function updateMediaLinks() {
         el.removeAttribute('data-src');
     });
 }
-
-// Giỏ hàng: lưu trong localStorage key "drinkhub_cart"
+//Dùng localStorage để lưu giỏ hàng đơn giản
 function loadCart() {
     try {
         const cart = JSON.parse(localStorage.getItem('drinkhub_cart') || '[]');
@@ -744,11 +736,10 @@ function updateCartBadge() {
     badge.style.display = count > 0 ? 'inline-flex' : 'none';
 }
 
-// Public API nhỏ để trang khác gọi cập nhật badge
 window.DrinkHub = window.DrinkHub || {};
 window.DrinkHub.updateCartBadge = updateCartBadge;
 
-// Load HTML component vào placeholder
+//Tải header và footer
 async function loadComponent(id, file) {
     const element = document.getElementById(id);
     if (element) {
@@ -758,12 +749,12 @@ async function loadComponent(id, file) {
                 element.innerHTML = await response.text();
             }
         } catch (err) {
-            console.error("Lỗi tải component:", err);
+            console.error("Error loading component:", err);
         }
     }
 }
 
-// Khởi tạo sau khi DOM sẵn sàng
+
 document.addEventListener("DOMContentLoaded", async () => {
     const basePath = getBasePath();
     await loadComponent("header-placeholder", basePath + "/html/header.html");
