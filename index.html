@@ -1,156 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DrinkHub - Review Thật & Đặt Món Nhanh</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./index.css">
-    <link rel="stylesheet" href="./assets/component/footer/footer.css">
-    <link rel="stylesheet" href="./assets/component/header/header.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
-        rel="stylesheet">
-
-    <link rel="stylesheet" href="../WebHTCNW-main/index.css">
-</head>
-
-<body>
-
-    <div id="header-placeholder"></div>
-
-    <main>
-        <section class="hero-section">
-            <div class="hero-overlay"></div>
-            <div class="hero-content">
-                <span class="hero-subtitle">NỀN TẢNG REVIEW & ĐẶT MÓN TOÀN DIỆN</span>
-                <h1 class="hero-title">Từ Review Chân Thực<br>Đến Ly Nước Trên Tay</h1>
-                <p class="hero-description">
-                    Đừng đánh cược vị giác của bạn. Khám phá hàng ngàn đánh giá thực tế từ cộng đồng DrinkHub để chọn
-                    đúng món "chân ái". Ưng ý quán nào? Bấm đặt hàng ngay và nhận nước chỉ trong 30 phút.
-                </p>
-                <a href="./assets/page/listPage/listPage.html" class="btn-primary">
-                    Xem Review & Đặt Món <i class="fa-solid fa-motorcycle"></i>
-                </a>
-            </div>
-           
-        </section>
-
-        <section class="featured-section">
-            <h2 class="section-title">Khám phá những quán Caffe ngon tại Sài Gòn City</h2>
-
-            <div class="cafe-slider">
-                <button class="slider-btn prev-btn" id="prevBtn">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </button>
-
-                <div class="cafe-cards" id="cafeCardsContainer">
-       
-                    <div class="cafe-card" onclick="goToCafeDetail(1, 'Oromia Coffee', 'Quận 3', 4.7, 120, './img/img1.jpg')">
-                        <div class="cafe-image">
-                            <img src="./img/img1.jpg" alt="Oromia Coffee">
-                            <div class="cafe-badge">🔥</div>
-                        </div>
-                        <div class="cafe-info">
-                            <h3 class="cafe-name">Oromia Coffee</h3>
-                            <div class="cafe-rating">
-                                <i class="fas fa-star"></i> 4.7 <span>(120 đánh giá)</span>
-                            </div>
-                            <div class="cafe-location">
-                                <i class="fas fa-map-marker-alt"></i> Quận 3
-                            </div>
-                        </div>
-                    </div>
-
-            
-                    <div class="cafe-card" onclick="goToCafeDetail(2, 'The Workshop', 'Quận 1', 4.6, 98, './img/img2.jpg')">
-                        <div class="cafe-image">
-                            <img src="./img/img2.jpg" alt="The Workshop">
-                            <div class="cafe-badge">⭐</div>
-                        </div>
-                        <div class="cafe-info">
-                            <h3 class="cafe-name">The Workshop</h3>
-                            <div class="cafe-rating">
-                                <i class="fas fa-star"></i> 4.6 <span>(98 đánh giá)</span>
-                            </div>
-                            <div class="cafe-location">
-                                <i class="fas fa-map-marker-alt"></i> Quận 1
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="cafe-card" onclick="goToCafeDetail(3, 'L\'usine', 'Quận 1', 4.5, 85, './img/img3.jpg')">
-                        <div class="cafe-image">
-                            <img src="./img/img3.jpg" alt="L'usine">
-                            <div class="cafe-badge">☕</div>
-                        </div>
-                        <div class="cafe-info">
-                            <h3 class="cafe-name">L'usine</h3>
-                            <div class="cafe-rating">
-                                <i class="fas fa-star"></i> 4.5 <span>(85 đánh giá)</span>
-                            </div>
-                            <div class="cafe-location">
-                                <i class="fas fa-map-marker-alt"></i> Quận 1
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="slider-btn next-btn" id="nextBtn">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </button>
-            </div>
-        </section>
-    </main>
-
-    <button class="floating-search-btn" onclick="window.location.href='./pages/listPage/listPage.html'">
-        <i class="fa-solid fa-search"></i> Bạn đang thèm gì?
-    </button>
-
-    <div id="footer-placeholder"></div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="./assets/js/main.js"></script>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>DrinkHub</title>
+    <meta http-equiv="refresh" content="0; url=./html/index.html" />
     <script>
-        const slider = document.getElementById('cafeCardsContainer');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        if (prevBtn && nextBtn && slider) {
-            prevBtn.addEventListener('click', () => {
-                slider.scrollBy({
-                    left: -300,
-                    behavior: 'smooth'
-                });
-            });
-
-            nextBtn.addEventListener('click', () => {
-                slider.scrollBy({
-                    left: 300,
-                    behavior: 'smooth'
-                });
-            });
-        }
-        function goToCafeDetail(id, name, district, rating, reviewCount, imageUrl) {
-            // Lưu ảnh dạng URL tuyệt đối để detailPage không bị mất hình
-            const absoluteImageUrl = imageUrl ? new URL(imageUrl, window.location.href).href : '';
-            const cafeData = {
-                id: id,
-                ten: name,
-                quan: district,
-                rating: rating,
-                review: reviewCount,
-                img: absoluteImageUrl
-            };
-            localStorage.setItem("selectedCafe", JSON.stringify(cafeData));
-            window.location.href = "./assets/page/detailPage/detailPage.html";
-        }
-        window.goToCafeDetail = goToCafeDetail;
+      // Giữ tương thích: ai mở /index.html ở root sẽ được chuyển vào /html/index.html
+      window.location.replace('./html/index.html');
     </script>
-</body>
-
+  </head>
+  <body>
+    <p>Đang chuyển hướng… <a href="./html/index.html">Bấm vào đây nếu không tự chuyển</a></p>
+  </body>
 </html>

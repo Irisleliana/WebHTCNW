@@ -3,11 +3,11 @@
     Mục tiêu: trang nào nhúng main.js đều chạy được dù đang ở thư mục con nào.
 */
 
-// Tìm đường dẫn tới thư mục /assets dựa trên vị trí file main.js
+// Tìm đường dẫn tới thư mục gốc project dựa trên vị trí file /js/main.js
 function getBasePath() {
     const scripts = document.getElementsByTagName('script');
     for (let script of scripts) {
-        if (script.src.includes('main.js')) {
+        if (script.src && script.src.includes('main.js')) {
             const scriptPath = script.src;
             const jsIndex = scriptPath.lastIndexOf('/js/main.js');
             if (jsIndex !== -1) {
@@ -15,17 +15,12 @@ function getBasePath() {
             }
         }
     }
-    return './assets';
+    return '.';
 }
 
-
+// Giữ tên hàm cũ để các phần còn lại dùng thống nhất
 function getRootPath() {
-    const basePath = getBasePath();
-    const assetsIndex = basePath.lastIndexOf('/assets');
-    if (assetsIndex !== -1) {
-        return basePath.substring(0, assetsIndex);
-    }
-    return '.';
+    return getBasePath();
 }
 
 function loadScriptOnce(src) {
@@ -154,7 +149,7 @@ function setHeaderAuthUI(user) {
     }
 
     const rootPath = getRootPath();
-    const userPageUrl = rootPath + '/assets/page/userPage/userPage.html';
+    const userPageUrl = rootPath + '/html/userPage.html';
 
     // Xoá handler cũ (nếu có)
     if (accountButton._drinkhubClickHandler) {
@@ -187,7 +182,7 @@ function setHeaderAuthUI(user) {
 async function populateUserPage(user) {
     // Chỉ chạy trên userPage
     const currentPath = window.location.pathname.replace(/\\/g, '/');
-    if (!currentPath.endsWith('/assets/page/userPage/userPage.html')) {
+    if (!currentPath.endsWith('/html/userPage.html')) {
         return;
     }
 
@@ -330,7 +325,7 @@ function getDetailPageUrl(card) {
         delivery
     });
 
-    return rootPath + '/assets/page/detailPage/detailPage.html?' + params.toString();
+    return rootPath + '/html/detailPage.html?' + params.toString();
 }
 
 function attachCafeCardNavigation() {
@@ -409,7 +404,7 @@ async function attachAuthModalValidation() {
         setHeaderAuthUI(null);
         if (firebaseState.reason === 'missing-config') {
             console.warn(
-                'DrinkHub: Chưa cấu hình Firebase. Hãy điền config ở assets/js/firebase-config.js và chạy bằng localhost (Live Server).'
+                'DrinkHub: Chưa cấu hình Firebase. Hãy điền config ở js/firebase-config.js và chạy bằng localhost (Live Server).'
             );
         }
     }
@@ -420,7 +415,7 @@ async function attachAuthModalValidation() {
             setHeaderAuthUI(user);
 
             const currentPath = window.location.pathname.replace(/\\/g, '/');
-            if (currentPath.endsWith('/assets/page/userPage/userPage.html')) {
+            if (currentPath.endsWith('/html/userPage.html')) {
                 if (!user) {
                     // Mở modal đăng nhập khi truy cập userPage mà chưa đăng nhập.
                     const modalEl = document.getElementById('authModal');
@@ -490,7 +485,7 @@ async function attachAuthModalValidation() {
 
             if (!firebaseEnabled) {
                 if (firebaseState.reason === 'missing-config') {
-                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở assets/js/firebase-config.js (xem FIREBASE_SETUP.md).');
+                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở js/firebase-config.js (xem FIREBASE_SETUP.md).');
                     return;
                 }
 
@@ -579,7 +574,7 @@ async function attachAuthModalValidation() {
 
             if (!firebaseEnabled) {
                 if (firebaseState.reason === 'missing-config') {
-                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở assets/js/firebase-config.js (xem FIREBASE_SETUP.md).');
+                    alert('Bạn chưa cấu hình Firebase. Hãy điền config ở js/firebase-config.js (xem FIREBASE_SETUP.md).');
                     return;
                 }
 
@@ -639,7 +634,7 @@ function attachCafeSearch() {
     }
 
     const rootPath = getRootPath();
-    const listPageUrl = rootPath + '/assets/page/listPage/listPage.html';
+    const listPageUrl = rootPath + '/html/listPage.html';
 
     const listSearchInput = document.getElementById('searchInput');
     const listDistrictSelect = document.getElementById('locQuan');
@@ -709,6 +704,20 @@ function attachCafeSearch() {
     }
 }
 
+// Sau khi load component, đổi data-src -> src thật (theo rootPath)
+function updateMediaLinks() {
+    const rootPath = getRootPath();
+    const mediaEls = document.querySelectorAll('[data-src]');
+    mediaEls.forEach(el => {
+        const dataSrc = el.getAttribute('data-src');
+        if (!dataSrc) return;
+
+        const resolved = rootPath + '/' + dataSrc.replace(/^\//, '');
+        el.setAttribute('src', resolved);
+        el.removeAttribute('data-src');
+    });
+}
+
 // Giỏ hàng: lưu trong localStorage key "drinkhub_cart"
 function loadCart() {
     try {
@@ -757,10 +766,11 @@ async function loadComponent(id, file) {
 // Khởi tạo sau khi DOM sẵn sàng
 document.addEventListener("DOMContentLoaded", async () => {
     const basePath = getBasePath();
-    await loadComponent("header-placeholder", basePath + "/component/header/header.html");
-    await loadComponent("footer-placeholder", basePath + "/component/footer/footer.html");
+    await loadComponent("header-placeholder", basePath + "/html/header.html");
+    await loadComponent("footer-placeholder", basePath + "/html/footer.html");
     updateNavLinks();
     updateActiveHeaderLink();
+    updateMediaLinks();
     updateCartBadge();
     attachCafeCardNavigation();
     initDetailPageData();
